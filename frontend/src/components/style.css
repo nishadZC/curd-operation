@@ -263,7 +263,7 @@ header nav {
 header nav .authentication .auth-btn {
   position: relative;
   overflow: hidden;
-  background: var(--secondarr-text-clr);
+  background: var(--card-border);
   border: none;
   color: var(--body-clt);
   cursor: pointer;
