@@ -263,9 +263,9 @@ header nav {
 header nav .authentication .auth-btn {
   position: relative;
   overflow: hidden;
-  background: var(--secondarr-text-clr);
+  background: var(--body-clt);
   border: none;
-  color: var(--body-clt);
+  color: var(--text-clr);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -296,7 +296,7 @@ header nav .authentication .auth-btn:hover::before {
 }
 
 header nav .authentication .auth-btn:hover {
-  color: var(--secondarr-text-clr);
+  color: var(--base-clr);
 }
 
 header nav .authentication .auth-btn svg,
