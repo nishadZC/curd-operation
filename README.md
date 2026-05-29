@@ -16,4 +16,12 @@ CRUD operation using MERN stack
 
 # Use Docker compose to run everything at once
 - sudo docker compose down
-- sudo docker compose up --build
+- sudo docker compose -f /homevboxuser/task/crud-operation/docker-compose up -d --build
+
+# To push in docker hub (registry)
+# frontend
+- sudo docker build -t nishadzc/curd-operation-frontend:latest ./frontend
+- sudo docker push nishadzc/curd-operation-frontend:latest
+# backend
+- sudo docker build -t nishadzc/curd-operation-backend:latest ./back-end
+- sudo docker push nishadzc/curd-operation-backend:latest 
