@@ -41,15 +41,11 @@ pipeline {
         }
 
         stage('Install Dependencies') {
-            agent { docker { image 'node:18' } }
             steps {
                 sh '''
                     set -e
-                    cd back-end
-                    npm ci
-
-                    cd ../frontend
-                    npm ci
+                    # Run npm in an ephemeral Node container so agents don't need Node installed
+                    docker run --rm -v "$PWD":/ws -w /ws node:18 sh -c "cd back-end && npm ci && cd ../frontend && npm ci"
                 '''
             }
         }
