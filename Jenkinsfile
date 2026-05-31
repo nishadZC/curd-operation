@@ -9,6 +9,7 @@ pipeline {
     environment {
         COMPOSE_DOCKER_CLI_BUILD = '1'
         DOCKER_BUILDKIT = '1'
+        GIT_URL = 'https://github.com/VinayakNishad17/curd-operation.git'
     }
 
     stages {
