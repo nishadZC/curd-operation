@@ -5,6 +5,7 @@ pipeline {
         timestamps()
         disableConcurrentBuilds()
     }
+
     tools {
         nodejs 'NodeJS-18'
     }
@@ -18,6 +19,25 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
+            }
+        }
+
+        stage('Environment Check') {
+            steps {
+                sh '''
+                    echo "User: $(whoami)"
+                    echo "Groups:"
+                    groups
+
+                    echo "Node Version:"
+                    node -v
+
+                    echo "NPM Version:"
+                    npm -v
+
+                    echo "Docker Version:"
+                    docker version
+                '''
             }
         }
 
