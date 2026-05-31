@@ -61,6 +61,7 @@ pipeline {
                 anyOf {
                     branch 'main'
                     branch 'master'
+                    branch 'docker-conf'
                 }
             }
             steps {
