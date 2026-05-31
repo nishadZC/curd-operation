@@ -4,7 +4,7 @@ CRUD operation using MERN stack
 # To run frontend docker
 - Go to frontend directory
 - sudo docker build -t frontend .
-- sudo docker run --rm -p 8080:80 frontend
+- sudo docker run --rm -p 8000:80 frontend
 
 # To run backend docker
 - Go to back-end folder
@@ -25,3 +25,10 @@ CRUD operation using MERN stack
 # backend
 - sudo docker build -t nishadzc/curd-operation-backend:latest ./back-end
 - sudo docker push nishadzc/curd-operation-backend:latest 
+
+# Jenkins CI/CD
+- Add this repo as a Jenkins multibranch pipeline or pipeline job.
+- Point Jenkins to the root `Jenkinsfile`.
+- Make sure the Jenkins agent has Docker and Docker Compose installed.
+- Make sure `back-end/.env` is available on the agent, or inject `MONGODB_URI` and other runtime values through Jenkins credentials.
+- The pipeline will install dependencies, validate the frontend build, validate the compose file, build images, and deploy on `main` or `master`.
