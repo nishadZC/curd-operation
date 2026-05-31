@@ -5,6 +5,9 @@ pipeline {
         timestamps()
         disableConcurrentBuilds()
     }
+    tools {
+        nodejs 'NodeJS-18'
+    }
 
     environment {
         COMPOSE_DOCKER_CLI_BUILD = '1'
