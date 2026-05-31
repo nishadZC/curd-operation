@@ -41,6 +41,7 @@ pipeline {
         }
 
         stage('Install Dependencies') {
+            agent { docker { image 'node:18' } }
             steps {
                 sh '''
                     set -e
