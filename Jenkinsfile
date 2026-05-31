@@ -62,8 +62,7 @@ pipeline {
         stage('Deploy') {
             when {
                 anyOf {
-                    branch 'main'
-                    branch 'master'
+                    branch 'docker-conf'
                 }
             }
             steps {
