@@ -14,7 +14,28 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                script {
+                    try {
+                        checkout scm
+                    } catch (err) {
+                        echo "checkout scm failed: ${err}"
+                        if (env.GIT_URL) {
+                            echo "Falling back to explicit git clone from ${env.GIT_URL}"
+                            sh '''
+                                set -e
+                                rm -rf *
+                                git clone "$GIT_URL" .
+                                if [ -n "$GIT_BRANCH" ]; then
+                                  git checkout "$GIT_BRANCH"
+                                elif [ -n "$BRANCH_NAME" ]; then
+                                  git checkout "$BRANCH_NAME"
+                                fi
+                            '''
+                        } else {
+                            error("checkout scm failed and GIT_URL not set; configure job as Multibranch Pipeline or set GIT_URL in job environment")
+                        }
+                    }
+                }
             }
         }
 
