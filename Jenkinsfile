@@ -61,8 +61,8 @@ pipeline {
 
         stage('Deploy') {
             when {
-                anyOf {
-                    branch 'docker-conf'
+                expression {
+                    env.BRANCH_NAME == 'docker-conf' || env.GIT_BRANCH == 'origin/docker-conf' || env.GIT_BRANCH == 'docker-conf'
                 }
             }
             steps {
