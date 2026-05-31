@@ -9,34 +9,12 @@ pipeline {
     environment {
         COMPOSE_DOCKER_CLI_BUILD = '1'
         DOCKER_BUILDKIT = '1'
-        GIT_URL = 'https://github.com/VinayakNishad17/curd-operation.git'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                script {
-                    try {
-                        checkout scm
-                    } catch (err) {
-                        echo "checkout scm failed: ${err}"
-                        if (env.GIT_URL) {
-                            echo "Falling back to explicit git clone from ${env.GIT_URL}"
-                                                        sh '''
-                                                                set -e
-                                                                BR="${GIT_BRANCH:-${BRANCH_NAME:-main}}"
-                                                                # Initialize and fetch into the existing workspace (safer than cloning over non-empty dir)
-                                                                rm -rf .git || true
-                                                                git init
-                                                                git remote add origin "$GIT_URL"
-                                                                git fetch --depth=1 origin "$BR"
-                                                                git reset --hard FETCH_HEAD
-                                                        '''
-                        } else {
-                            error("checkout scm failed and GIT_URL not set; configure job as Multibranch Pipeline or set GIT_URL in job environment")
-                        }
-                    }
-                }
+                checkout scm
             }
         }
 
@@ -44,8 +22,11 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    # Run npm in an ephemeral Node container so agents don't need Node installed
-                    docker run --rm -v "$PWD":/ws -w /ws node:18 sh -c "cd back-end && npm ci && cd ../frontend && npm ci"
+                    cd back-end
+                    npm ci
+
+                    cd ../frontend
+                    npm ci
                 '''
             }
         }
@@ -80,7 +61,6 @@ pipeline {
                 anyOf {
                     branch 'main'
                     branch 'master'
-                    branch 'docker-conf'
                 }
             }
             steps {
