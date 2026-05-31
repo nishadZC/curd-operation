@@ -66,7 +66,11 @@ pipeline {
                 }
             }
             steps {
-                sh 'docker compose -f docker-compose.yml up -d --remove-orphans'
+                sh '''
+                    set -e
+                    docker rm -f curd-backend curd-frontend || true
+                    docker compose -f docker-compose.yml up -d --remove-orphans
+                '''
             }
         }
     }
