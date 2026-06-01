@@ -20,6 +20,16 @@ pipeline {
                 checkout scm
             }
         }
+        stage('Verify Branch') {
+            steps {
+                script {
+                    if (env.BRANCH_NAME != 'task_4') {
+                        error("This pipeline only runs for task_4 branch")
+                    }
+                }
+            }
+        }
+
 
         stage('Test') {
             steps {
