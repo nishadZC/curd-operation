@@ -3,15 +3,15 @@ pipeline {
 
     options {
         timestamps()
-        disableConcurrentBuilds()
     }
+
     tools {
         nodejs 'NodeJS-18'
     }
 
     environment {
-        COMPOSE_DOCKER_CLI_BUILD = '1'
-        DOCKER_BUILDKIT = '1'
+        BACKEND_IMAGE = 'nishadzc/curd-operation-backend'
+        FRONTEND_IMAGE = 'nishadzc/curd-operation-frontend'
     }
 
     stages {
@@ -21,63 +21,50 @@ pipeline {
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Test') {
             steps {
                 sh '''
                     set -e
                     cd back-end
                     npm ci
-
-                    cd ../frontend
-                    npm ci
-                '''
-            }
-        }
-
-        stage('Validate Code') {
-            steps {
-                sh '''
-                    set -e
-                    cd back-end
                     node --check server.js
 
                     cd ../frontend
+                    npm ci
                     npm run build
                 '''
             }
         }
 
-        stage('Validate Compose') {
-            steps {
-                sh 'docker compose -f docker-compose.yml config'
-            }
-        }
-
         stage('Build Images') {
-            steps {
-                sh 'docker compose -f docker-compose.yml build'
-            }
-        }
-
-        stage('Deploy') {
-            when {
-                expression {
-                    env.BRANCH_NAME == 'docker-conf' || env.GIT_BRANCH == 'origin/docker-conf' || env.GIT_BRANCH == 'docker-conf'
-                }
-            }
             steps {
                 sh '''
                     set -e
-                    docker rm -f curd-backend curd-frontend || true
-                    docker compose -f docker-compose.yml up -d --remove-orphans
+                    docker build -t "${BACKEND_IMAGE}:${BUILD_NUMBER}" ./back-end
+                    docker build -t "${FRONTEND_IMAGE}:${BUILD_NUMBER}" ./frontend
                 '''
             }
         }
-    }
 
-    post {
-        always {
-            sh 'docker compose -f docker-compose.yml ps || true'
+        stage('Push Images') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'nishadzc', passwordVariable: 'Vnishad2468@#')]) {
+                    sh '''
+                        set -e
+                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
+
+                        docker tag "${BACKEND_IMAGE}:${BUILD_NUMBER}" "${BACKEND_IMAGE}:latest"
+                        docker tag "${FRONTEND_IMAGE}:${BUILD_NUMBER}" "${FRONTEND_IMAGE}:latest"
+
+                        docker push "${BACKEND_IMAGE}:${BUILD_NUMBER}"
+                        docker push "${BACKEND_IMAGE}:latest"
+                        docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
+                        docker push "${FRONTEND_IMAGE}:latest"
+
+                        docker logout
+                    '''
+                }
+            }
         }
     }
 }
