@@ -3,28 +3,28 @@ CRUD operation using MERN stack
 
 # To run frontend docker
 - Go to frontend directory
-- sudo docker build -t frontend .
-- sudo docker run --rm -p 8000:80 frontend
+- docker build -t frontend .
+- docker run --rm -p 8000:80 frontend
 
 # To run backend docker
 - Go to back-end folder
-- sudo docker build -t back-end .
-- sudo docker run --rm -p 3001:3001 -e MONGODB_URI=mongodb+srv://vn07244_db_user:OMAqyd5PnOt7Ddbx@cluster0.mfjfyb8.mongodb.net/EventManagement backend
+-  docker build -t back-end .
+-  docker run --rm -p 3001:3001 -e MONGODB_URI=mongodb+srv://vn07244_db_user:OMAqyd5PnOt7Ddbx@cluster0.mfjfyb8.mongodb.net/EventManagement backend
 
 # To see container running status
 - docker ps 
 
 # Use Docker compose to run everything at once
-- sudo docker compose down
-- sudo docker compose -f /homevboxuser/task/crud-operation/docker-compose up -d --build
+- docker compose down
+- docker compose -f /home/vboxuser/task/curd-operation/docker-compose.yml up -d --build
 
 # To push in docker hub (registry)
 # frontend
-- sudo docker build -t nishadzc/curd-operation-frontend:latest ./frontend
-- sudo docker push nishadzc/curd-operation-frontend:latest
+-  docker build -t nishadzc/curd-operation-frontend:latest ./frontend
+-  docker push nishadzc/curd-operation-frontend:latest
 # backend
-- sudo docker build -t nishadzc/curd-operation-backend:latest ./back-end
-- sudo docker push nishadzc/curd-operation-backend:latest 
+-  docker build -t nishadzc/curd-operation-backend:latest ./back-end
+-  docker push nishadzc/curd-operation-backend:latest 
 
 # Jenkins CI/CD
 - Add this repo as a Jenkins multibranch pipeline or pipeline job.
