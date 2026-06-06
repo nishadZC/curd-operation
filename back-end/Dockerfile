@@ -8,5 +8,5 @@ RUN npm ci
 COPY . .
 
 EXPOSE 3001
-
+# VOLUME /tmp
 CMD ["npm", "start"]

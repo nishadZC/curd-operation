@@ -1,20 +1,18 @@
 services:
   backend:
-    build:
-      context: ./back-end
-    image: curd-backend:1.0.0
-    container_name: curd-backend
+    build: ./back-end
+    image: nishadzc/curd-backend:1.0.0
+    restart: unless-stopped
     env_file:
       - ./back-end/.env
     ports:
       - "3001:3001"
 
   frontend:
-    build:
-      context: ./frontend
-    image: curd-frontend:1.0.0
-    container_name: curd-frontend
+    build: ./frontend
+    image: nishadzc/curd-frontend:1.0.0
+    restart: unless-stopped
     ports:
-      - "8000:80" 
+      - "8000:80"
     depends_on:
       - backend

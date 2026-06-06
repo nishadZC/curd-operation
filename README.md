@@ -9,7 +9,7 @@ CRUD operation using MERN stack
 # To run backend docker
 - Go to back-end folder
 -  docker build -t back-end .
--  docker run --rm -p 3001:3001 -e MONGODB_URI=mongodb+srv://vn07244_db_user:OMAqyd5PnOt7Ddbx@cluster0.mfjfyb8.mongodb.net/EventManagement backend
+-  docker run --rm -p 3001:3001 -e MONGODB_URI=mongodb+srv://vn07244_db_user:OMAqyd5PnOt7Ddbx@cluster0.mfjfyb8.mongodb.net/EventManagement back-end
 
 # To see container running status
 - docker ps 
@@ -18,6 +18,7 @@ CRUD operation using MERN stack
 - docker compose down
 - docker compose -f /home/vboxuser/task/curd-operation/docker-compose.yml up -d --build
 
+
 # To push in docker hub (registry)
 # frontend
 -  docker build -t nishadzc/curd-operation-frontend:latest ./frontend
@@ -25,6 +26,9 @@ CRUD operation using MERN stack
 # backend
 -  docker build -t nishadzc/curd-operation-backend:latest ./back-end
 -  docker push nishadzc/curd-operation-backend:latest 
+
+
+
 
 # Jenkins CI/CD
 - Add this repo as a Jenkins multibranch pipeline or pipeline job.
