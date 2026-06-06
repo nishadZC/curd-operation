@@ -20,16 +20,6 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Verify Branch') {
-            steps {
-                script {
-                    if (env.BRANCH_NAME != 'task_4') {
-                        error("This pipeline only runs for task_4 branch")
-                    }
-                }
-            }
-        }
-
 
         stage('Test') {
             steps {
@@ -58,10 +48,9 @@ pipeline {
 
         stage('Push Images') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
+                withDockerRegistry([credentialsId: 'dockerhub-creds', url: '']) {
                     sh '''
                         set -e
-                        echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
 
                         docker tag "${BACKEND_IMAGE}:${BUILD_NUMBER}" "${BACKEND_IMAGE}:latest"
                         docker tag "${FRONTEND_IMAGE}:${BUILD_NUMBER}" "${FRONTEND_IMAGE}:latest"
@@ -70,8 +59,6 @@ pipeline {
                         docker push "${BACKEND_IMAGE}:latest"
                         docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
                         docker push "${FRONTEND_IMAGE}:latest"
-
-                        docker logout
                     '''
                 }
             }
