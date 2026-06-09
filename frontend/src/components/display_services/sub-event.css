@@ -2,7 +2,7 @@
 .sub-event-form{
     display: grid;
     border: 1px solid var(--line-clr);
-    border-radius: 1em;
+    border-radius: 1.5em;
     margin: 16px;
     margin-bottom: 20px;
     padding: min(3em,15%);
@@ -14,13 +14,16 @@
     background-color: var(--secondarr-text-clr);
     color: var(--body-clt);
     font-weight: 600;
-    width: 180px;
+    width: fit-content;
+    border: none;
+    text-wrap: nowrap;
+    text-align: center;
+    justify-content: center;
 }
 .sub-event-form form  button:hover{
     background-color: var(--hover-clr);
     color: var(--btn-text);
     font-weight: 600;
-    width: 180px;
-    box-shadow: 0px 0px 4px , 0px 0px 4px var(--secondarr-text-clr);
+    width: fit-content;
     transition: 0.5s;
 }

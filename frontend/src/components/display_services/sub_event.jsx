@@ -37,10 +37,10 @@ const SubEvent = (props) => {
     <div className="sub-event-form">
       {/* <h2>Add 10 sample images</h2>
       <UploadImages studioId={studioId} /> */}
-      <span><h4>Add Sub Event for Studio ID:</h4>{studioId}</span>
+      <span><h4>Add Sub Event for ID:</h4></span>
       {message && <p>{message}</p>}
       <form onSubmit={handleSubmit}>
-        <label>Sub Event Title:</label>
+        <label >Sub Event Title:</label>
         <input
           type="text"
           value={title}

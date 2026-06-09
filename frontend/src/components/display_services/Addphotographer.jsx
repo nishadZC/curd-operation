@@ -59,7 +59,7 @@ const Studios = (props) => {
         <div className="container">
             <h2>Add Details</h2>
             <form onSubmit={handleSubmit}>
-                <input type="text" name="studio_name" placeholder="Studio Name" value={formData.studio_name} onChange={handleChange} required />
+                <input type="text" name="studio_name" placeholder="Title" value={formData.studio_name} onChange={handleChange} required />
                 <input type="text" name="studio_location" placeholder="Location" value={formData.studio_location} onChange={handleChange} required />
                 <textarea name="studio_description" placeholder="Description" value={formData.studio_description} onChange={handleChange} required />
                 <input type="tel" name="studio_contact" placeholder="Contact" value={formData.studio_contact} onChange={handleChange} required />

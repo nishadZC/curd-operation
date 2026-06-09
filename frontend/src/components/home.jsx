@@ -77,7 +77,7 @@ const Home = (props) => {
       </ul>
 
       <footer className="footer">
-        <p>&copy; 2025 Your Company. All rights reserved.</p>
+        <p>&copy; 2025 Eventify. All rights reserved.</p>
         <ul>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>

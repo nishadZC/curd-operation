@@ -53,7 +53,7 @@ const UploadImages = (props) => {
 
     return (
         <div className="container">
-            <h2>Upload Images for Studio</h2>
+            <h2>Upload Images</h2>
             <form onSubmit={handleUpload} className="upload-form">
                 <input type="file" multiple accept="image/*" onChange={handleFileChange} />
                 <button type="submit" disabled={uploading}>
