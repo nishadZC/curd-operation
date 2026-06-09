@@ -10,8 +10,7 @@ import fs from "fs";
 import PhotographerSubEvent from './Photographer/PhotographerSubEvent.js';
 import PhotographerSampleModel from './Photographer/PhotographerSampleSchema.js';
 import Contact from './contact.js';
-import dotenv from 'dotenv';
-import connectDB from './db.js';
+
 import HallStudio from './Hall/HallStudio.js';
 import HallSubEvent from './Hall/HallSubEvent.js';
 import HallSampleModel from './Hall/HallSampleSchema.js';
@@ -39,26 +38,13 @@ const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true })); // For form submissions
 app.use(express.json());
-dotenv.config();
-connectDB();
-const __dirname = path.resolve();
-// mongoose.connect(process.env.MONGODB_URI);
 
-const PORT = process.env.PORT || 3001;
-
+mongoose.connect("mongodb://127.0.0.1:27017/EventManagement");
 
 const asyncHandler = fn => (req, res) =>
     fn(req, res).catch(
         err => res.status(500).json({ error: err.message }));
 
-
-// filepath: c:\Users\vn072\OneDrive\Pictures\Documents\GitHub\curd-operation\back-end\server.js
-// ...existing code...
-app.use(express.static(path.join(__dirname, 'dist')));
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
-});
-// ...existing code...
 
 app.post("/", asyncHandler(
     async (req, res) =>
@@ -765,4 +751,4 @@ app.post("/user_form", async (req, res) => {
   });
   
 
-app.listen(PORT, () => console.log("Server running on port " + PORT));
+app.listen(3001, () => console.log("Server running on port 3001"));
