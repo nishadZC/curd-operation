@@ -12,14 +12,13 @@
 .services-section .service-list{
     display: grid;
     grid-auto-flow: column;
-    gap: 16px;
     overflow-x: auto;
 }
 .services-section .service-card {
     width: 240px;
     height: 450px;
     margin: 24px 16px;
-    padding: 16px;
+    padding: 16px 24px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;

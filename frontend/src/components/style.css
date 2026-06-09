@@ -68,8 +68,8 @@ header {
 }
 
 .top-bar ul {
-    display: flex;
-    width: 40%;
+    display: flex-box;
+    width: 35%;
     justify-content: space-evenly;
     margin: 0 4px;
 }
@@ -265,7 +265,7 @@ header nav .authentication .auth-btn {
   overflow: hidden;
   background: var(--secondarr-text-clr);
   border: none;
-  color: var(--body-clt);
+  color: var(--btn-text);
   cursor: pointer;
   display: flex;
   align-items: center;
