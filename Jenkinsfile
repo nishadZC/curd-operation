@@ -10,8 +10,8 @@ pipeline {
     }
 
     environment {
-        BACKEND_IMAGE = 'nishadzc/curd-operation-backend'
-        FRONTEND_IMAGE = 'nishadzc/curd-operation-frontend'
+        BACKEND_IMAGE = "${env.BACKEND_IMAGE}"
+        FRONTEND_IMAGE = "${env.FRONTEND_IMAGE}"
     }
 
     stages {
@@ -65,4 +65,3 @@ pipeline {
         }
     }
 }
-#some changes
