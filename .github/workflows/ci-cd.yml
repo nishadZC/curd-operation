@@ -1,0 +1,79 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  BACKEND_IMAGE: nishadzc/curd-operation-backend
+  FRONTEND_IMAGE: nishadzc/curd-operation-frontend
+
+jobs:
+  build-test-push:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Backend Test
+      - name: Install Backend Dependencies
+        working-directory: back-end
+        run: npm ci
+
+      - name: Validate Backend Code
+        working-directory: back-end
+        run: node --check server.js
+
+      # Frontend Test
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Build Frontend
+        working-directory: frontend
+        run: npm run build
+
+      # Docker Login
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      # Backend Image Build
+      - name: Build Backend Docker Image
+        run: |
+          docker build \
+          -t $BACKEND_IMAGE:${{ github.run_number }} \
+          -t $BACKEND_IMAGE:latest \
+          ./back-end
+
+      # Frontend Image Build
+      - name: Build Frontend Docker Image
+        run: |
+          docker build \
+          -t $FRONTEND_IMAGE:${{ github.run_number }} \
+          -t $FRONTEND_IMAGE:latest \
+          ./frontend
+
+      # Push Backend Image
+      - name: Push Backend Docker Image
+        run: |
+          docker push $BACKEND_IMAGE:${{ github.run_number }}
+          docker push $BACKEND_IMAGE:latest
+
+      # Push Frontend Image
+      - name: Push Frontend Docker Image
+        run: |
+          docker push $FRONTEND_IMAGE:${{ github.run_number }}
+          docker push $FRONTEND_IMAGE:latest
