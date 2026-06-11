@@ -77,3 +77,16 @@ jobs:
         run: |
           docker push $FRONTEND_IMAGE:${{ github.run_number }}
           docker push $FRONTEND_IMAGE:latest
+
+      # Notify Teams on Main Push
+      - name: Notify Teams on Main Push
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST "${{ secrets.TEAMS_WEBHOOK_URL }}" \
+          -H "Content-Type: application/json" \
+          -d '{
+            "repository": "${{ github.repository }}",
+            "actor": "${{ github.actor }}",
+            "message": "Code merged/pushed to main branch",
+            "runNumber": "${{ github.run_number }}"
+          }'
