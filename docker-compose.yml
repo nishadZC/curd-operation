@@ -16,5 +16,3 @@ services:
       - "8000:80"
     depends_on:
       - backend
-
-#done
