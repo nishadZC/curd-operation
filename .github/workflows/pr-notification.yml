@@ -1,0 +1,23 @@
+name: PR Notifications
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Notify Teams
+        run: |
+          curl -X POST "${{ secrets.TEAMS_WEBHOOK_URL }}" \
+            -H "Content-Type: application/json" \
+            -d '{
+              "repository":"${{ github.repository }}",
+              "actor":"${{ github.actor }}",
+              "message":"Pull Request Created",
+              "title":"${{ github.event.pull_request.title }}",
+              "url":"${{ github.event.pull_request.html_url }}"
+            }'
+#some changes
