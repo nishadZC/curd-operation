@@ -64,4 +64,31 @@ pipeline {
             }
         }
     }
+
+    post {
+        always {
+            echo "Pipeline execution completed."
+        }
+
+        success {
+            echo "SUCCESS: Docker images built and pushed successfully."
+        }
+
+        failure {
+            echo "FAILURE: Pipeline execution failed. Check the logs."
+        }
+
+        unstable {
+            echo "UNSTABLE: Some stages completed with warnings."
+        }
+
+        changed {
+            echo "Build status changed compared to the previous build."
+        }
+
+        cleanup {
+            echo "Cleaning up workspace..."
+            cleanWs()
+        }
+    }
 }
