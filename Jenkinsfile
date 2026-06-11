@@ -21,18 +21,31 @@ pipeline {
             }
         }
 
-        stage('Test') {
-            steps {
-                sh '''
-                    set -e
-                    cd back-end
-                    npm ci
-                    node --check server.js
+        stage('Parallel Tests') {
+            parallel {
+                stage('Backend Test') {
+                    steps {
+                        dir('back-end') {
+                            sh '''
+                                set -e
+                                npm ci
+                                node --check server.js
+                            '''
+                        }
+                    }
+                }
 
-                    cd ../frontend
-                    npm ci
-                    npm run build
-                '''
+                stage('Frontend Test') {
+                    steps {
+                        dir('frontend') {
+                            sh '''
+                                set -e
+                                npm ci
+                                npm run build
+                            '''
+                        }
+                    }
+                }
             }
         }
 
@@ -57,6 +70,7 @@ pipeline {
 
                         docker push "${BACKEND_IMAGE}:${BUILD_NUMBER}"
                         docker push "${BACKEND_IMAGE}:latest"
+
                         docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
                         docker push "${FRONTEND_IMAGE}:latest"
                     '''
