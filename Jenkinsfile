@@ -50,13 +50,13 @@ pipeline {
             }
         }
 
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: false
-                }
-            }
-        }
+        // stage('Quality Gate') {
+        //     steps {
+        //         timeout(time: 2, unit: 'MINUTES') {
+        //             waitForQualityGate abortPipeline: false
+        //         }
+        //     }
+        // }
 
         stage('Build Images') {
             steps {
@@ -87,5 +87,28 @@ pipeline {
                 }
             }
         }
+        stage('Deploy') {
+    steps {
+        sshagent(['vm-ssh-key']) {
+            sh '''
+            ssh -o StrictHostKeyChecking=no ubuntu@65.0.95.121 << EOF
+
+            docker pull ${BACKEND_IMAGE}:latest
+            docker pull ${FRONTEND_IMAGE}:latest
+
+            docker stop backend || true
+            docker rm backend || true
+
+            docker stop frontend || true
+            docker rm frontend || true
+
+            docker run -d --name backend -p 5000:5000 ${BACKEND_IMAGE}:latest
+            docker run -d --name frontend -p 80:80 ${FRONTEND_IMAGE}:latest
+
+            EOF
+            '''
+        }
+    }
+}
     }
 }
