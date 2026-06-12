@@ -87,7 +87,7 @@ pipeline {
         }
         stage('Deploy') {
             steps {
-                sshagent(['vm-ssh-key']) {
+                sshagent(['docker-vm-key']) {
                     sh '''
                     ssh -o StrictHostKeyChecking=no ubuntu@65.0.95.121 << EOF
         
