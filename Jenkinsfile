@@ -15,6 +15,7 @@ pipeline {
     }
 
     stages {
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -25,6 +26,7 @@ pipeline {
             steps {
                 sh '''
                     set -e
+
                     cd back-end
                     npm ci
                     node --check server.js
@@ -36,10 +38,31 @@ pipeline {
             }
         }
 
+        stage('SonarQube Analysis') {
+            steps {
+                script {
+                    def scannerHome = tool 'SonarScanner'
+
+                    withSonarQubeEnv('SonarQube') {
+                        sh "${scannerHome}/bin/sonar-scanner"
+                    }
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
+
         stage('Build Images') {
             steps {
                 sh '''
                     set -e
+
                     docker build -t "${BACKEND_IMAGE}:${BUILD_NUMBER}" ./back-end
                     docker build -t "${FRONTEND_IMAGE}:${BUILD_NUMBER}" ./frontend
                 '''
@@ -57,6 +80,7 @@ pipeline {
 
                         docker push "${BACKEND_IMAGE}:${BUILD_NUMBER}"
                         docker push "${BACKEND_IMAGE}:latest"
+
                         docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
                         docker push "${FRONTEND_IMAGE}:latest"
                     '''
