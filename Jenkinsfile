@@ -12,6 +12,7 @@ pipeline {
     environment {
         BACKEND_IMAGE = "${env.BACKEND_IMAGE}"
         FRONTEND_IMAGE = "${env.FRONTEND_IMAGE}"
+        VITE_API_BASE_URL = "http://65.0.95.121:3001"
     }
 
     stages {
