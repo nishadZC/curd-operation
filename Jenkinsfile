@@ -50,19 +50,10 @@ pipeline {
             }
         }
 
-        // stage('Quality Gate') {
-        //     steps {
-        //         timeout(time: 2, unit: 'MINUTES') {
-        //             waitForQualityGate abortPipeline: false
-        //         }
-        //     }
-        // }
-
         stage('Build Images') {
             steps {
                 sh '''
                     set -e
-
                     docker build -t "${BACKEND_IMAGE}:${BUILD_NUMBER}" ./back-end
                     docker build -t "${FRONTEND_IMAGE}:${BUILD_NUMBER}" ./frontend
                 '''
