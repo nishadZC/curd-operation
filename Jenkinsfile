@@ -86,25 +86,37 @@ pipeline {
             }
         }
         stage('Deploy') {
-        steps {
-            sshagent(['docker-vm-key']) {
-                sh """
-                    ssh -o StrictHostKeyChecking=no ubuntu@65.0.95.121 '
-                        docker pull ${BACKEND_IMAGE}:latest
-                        docker pull ${FRONTEND_IMAGE}:latest
-    
-                        docker stop backend || true
-                        docker rm backend || true
-    
-                        docker stop frontend || true
-                        docker rm frontend || true
-    
-                        docker run -d --name backend -p 3001:3001 ${BACKEND_IMAGE}:latest
-                        docker run -d --name frontend -p 80:80 ${FRONTEND_IMAGE}:latest
-                    '
-                """
+            steps {
+                withCredentials([
+                    string(credentialsId: 'mongodb-uri', variable: 'MONGODB_URI')
+                ]) {
+                    sshagent(['docker-vm-key']) {
+                        sh """
+                            ssh -o StrictHostKeyChecking=no ubuntu@65.0.95.121 '
+                                docker pull ${BACKEND_IMAGE}:latest
+                                docker pull ${FRONTEND_IMAGE}:latest
+        
+                                docker stop backend || true
+                                docker rm backend || true
+        
+                                docker stop frontend || true
+                                docker rm frontend || true
+        
+                                docker run -d \
+                                  --name backend \
+                                  -p 3001:3001 \
+                                  -e MONGODB_URI="${MONGODB_URI}" \
+                                  ${BACKEND_IMAGE}:latest
+        
+                                docker run -d \
+                                  --name frontend \
+                                  -p 80:80 \
+                                  ${FRONTEND_IMAGE}:latest
+                            '
+                        """
+                    }
+                }
             }
         }
-}
     }
 }
