@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import './contact.css'; 
-import env from 'dotenv';
-env.config();
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
@@ -17,7 +16,7 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`${process.env.VITE_API_BASE_URL}/contact`, formData);
+      await axios.post(`${apiBaseUrl}/contact`, formData);
       alert('Message sent successfully!');
       setFormData({ name: '', email: '', message: '' });
     } catch (err) {

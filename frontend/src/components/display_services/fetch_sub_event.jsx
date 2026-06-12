@@ -9,8 +9,7 @@ import "./fetch-sub-event.css"; // Optional for styling
 import { Link } from "react-router-dom";
 // import DisplayService from "./display_service"; // Not used in this snippet
 import Modal from 'react-bootstrap/Modal';
-import env from 'dotenv';
-env.config();
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const ModalComponent = (props) => {
   if (props.event === null) {
     return <></>
@@ -55,7 +54,7 @@ const FetchSubEvent = (props) => {
     const fetchSubEvents = async () => {
       try {
         const service = props.service;
-        const response = await axios.get(`${process.env.VITE_API_BASE_URL}/studios/${studioId}/subevents`, {
+        const response = await axios.get(`${apiBaseUrl}/studios/${studioId}/subevents`, {
           params: {
             service: service
           }
@@ -79,7 +78,7 @@ const FetchSubEvent = (props) => {
   const removeSubevent = async (subevent_id) => {
     try {
       const service = props.service;
-      const response = await axios.delete(`${process.env.VITE_API_BASE_URL}/subevents/${subevent_id}`, {
+      const response = await axios.delete(`${apiBaseUrl}/subevents/${subevent_id}`, {
         params: {
           service: service
         }

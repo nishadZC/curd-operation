@@ -5,8 +5,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../style.css";
-import env from 'dotenv';
-env.config();
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const Studios = (props) => {
     const studio = props.currentStudio;
     console.log("Service Name:" + props.service);
@@ -46,7 +45,7 @@ const Studios = (props) => {
         }
 
         try {
-            await axios.post(`${process.env.VITE_API_BASE_URL}/updateStudio`, formDataWithImage, {
+            await axios.post(`${apiBaseUrl}/updateStudio`, formDataWithImage, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             setFormData({

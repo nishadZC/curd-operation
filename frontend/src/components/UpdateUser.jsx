@@ -2,8 +2,7 @@ import React, { useEffect,useState } from 'react'
 import { useParams,useNavigate } from 'react-router-dom'
 import "bootstrap/dist/css/bootstrap.min.css";
 import axios  from "axios";
-import env from 'dotenv';
-env.config();
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const UpdateUser = () => {
     const {id}=useParams()
     const[emp_name,setName]=useState("")
@@ -13,7 +12,7 @@ const UpdateUser = () => {
 
 
     useEffect(() => {
-        axios.get(`${process.env.VITE_API_BASE_URL}/getUser/${id}`)
+        axios.get(`${apiBaseUrl}/getUser/${id}`)
             .then(result => {
                 console.log(result);
                 setName(result.data.emp_name);
@@ -25,7 +24,7 @@ const UpdateUser = () => {
     
     const update = e => {
         e.preventDefault();
-        axios.put(`${process.env.VITE_API_BASE_URL}/updateUser/${id}`, { emp_name, emp_email, emp_age })
+        axios.put(`${apiBaseUrl}/updateUser/${id}`, { emp_name, emp_email, emp_age })
             .then(result => {
                 console.log(result);
                 navigate("/home");

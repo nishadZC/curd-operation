@@ -9,8 +9,7 @@ import './get-package.css'
 
 import Modal from 'react-bootstrap/Modal';
 import UpdatePackage from "./update-package"
-import env from 'dotenv';
-env.config();
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const ModalComponent = (props) => {
   return (
@@ -38,7 +37,7 @@ const GetPackage = (props) => {
       try {
         // console.log("Get Package: ",props.packageType);
 
-        const response = await axios.get(`${process.env.VITE_API_BASE_URL}/get_packages`, {
+        const response = await axios.get(`${apiBaseUrl}/get_packages`, {
           params: {
             packageType: props.packageType,
           },
@@ -55,7 +54,7 @@ const GetPackage = (props) => {
   // 🔍 Fetch studioID based on photographer name
   const handlePhotographerClick = async (name, serviceType) => {
     try {
-      const response = await axios.get(`${process.env.VITE_API_BASE_URL}/getStudios`, {
+      const response = await axios.get(`${apiBaseUrl}/getStudios`, {
         params: {
           service: serviceType,
         },

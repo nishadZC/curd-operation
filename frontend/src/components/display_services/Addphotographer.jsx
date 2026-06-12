@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../style.css";
-import env from 'dotenv';
-env.config();
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const Studios = (props) => {
     const [formData, setFormData] = useState({
         studio_name: "",
@@ -38,7 +37,7 @@ const Studios = (props) => {
         }
 
         try {
-            await axios.post(`${process.env.VITE_API_BASE_URL}/addStudios`, formDataWithImage, {
+            await axios.post(`${apiBaseUrl}/addStudios`, formDataWithImage, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             setFormData({

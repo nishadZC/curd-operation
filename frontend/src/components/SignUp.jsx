@@ -2,8 +2,7 @@ import React, { useState } from 'react'
 import axios from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useNavigate } from 'react-router-dom';
-import env from 'dotenv';
-env.config();
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const signUp = () => {
     const [admin_name, setName] = useState("")
     const [admin_email, setEmail] = useState("");
@@ -12,7 +11,7 @@ const signUp = () => {
 
     const Submit = (e) => {
         e.preventDefault();
-        axios.post(`${process.env.VITE_API_BASE_URL}`, { admin_name, admin_email, admin_password })
+        axios.post(`${apiBaseUrl}`, { admin_name, admin_email, admin_password })
             .then(result => {
                 console.log(result)
                 navigate("/login")
