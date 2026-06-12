@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "../style.css";
-
+import env from 'dotenv';
+env.config();
 const Studios = (props) => {
     const [formData, setFormData] = useState({
         studio_name: "",
@@ -37,7 +38,7 @@ const Studios = (props) => {
         }
 
         try {
-            await axios.post("http://localhost:3001/addStudios", formDataWithImage, {
+            await axios.post(`${process.env.VITE_API_BASE_URL}/addStudios`, formDataWithImage, {
                 headers: { "Content-Type": "multipart/form-data" },
             });
             setFormData({

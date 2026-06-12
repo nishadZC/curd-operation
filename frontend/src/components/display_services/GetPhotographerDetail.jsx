@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 
 import Modal from 'react-bootstrap/Modal';
 import Carousel from "react-bootstrap/Carousel";
+import env from 'dotenv';
+env.config();
 
 const ModalComponent = (props) => {
     return (
@@ -22,7 +24,7 @@ const ModalComponent = (props) => {
                             <Carousel.Item key={index}>
                                 <img
                                     className="modal-image"
-                                    src={`http://localhost:3001${image}`}
+                                    src={`${process.env.VITE_API_BASE_URL}${image}`}
                                     alt={`Slide ${index + 1}`}
                                     height={50}
                                 />
@@ -45,7 +47,7 @@ const GetPhotographerDetail = (props) => {
                 const service = props.service;
                 // console.log("From GetPhotographerDetail:"+service);
 
-                const response = await axios.get(`http://localhost:3001/getPhotographerImages/${studioId}`, {
+                const response = await axios.get(`${process.env.VITE_API_BASE_URL}/getPhotographerImages/${studioId}`, {
                     params: {
                         service: service
                     }
@@ -78,7 +80,7 @@ const GetPhotographerDetail = (props) => {
                     <div className="get-photographer-image-grid">
                         {images.map((image, index) => (
                             <span onClick={handleShow}>
-                                <img key={index} src={`http://localhost:3001${image}`} alt={`Sample ${index + 1}`} className="get-photographer-grid-image" />
+                                <img key={index} src={`${process.env.VITE_API_BASE_URL}${image}`} alt={`Sample ${index + 1}`} className="get-photographer-grid-image" />
                             </span>
                         ))}
 

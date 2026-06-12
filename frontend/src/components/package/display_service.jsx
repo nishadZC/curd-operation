@@ -2,6 +2,9 @@ import React from 'react'
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+import env from 'dotenv';
+env.config();
+
 const Display_service = (props) => {
     console.log(props);
     
@@ -9,7 +12,7 @@ const Display_service = (props) => {
 
     const handlePhotographerClick = async (name, serviceType) => {
         try {
-            const response = await axios.get("http://localhost:3001/getStudios", {
+            const response = await axios.get(`${process.env.VITE_API_BASE_URL}/getStudios`, {
                 params: {
                     service: serviceType,
                 },

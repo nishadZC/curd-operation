@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "../style.css";
+import env from 'dotenv';
+env.config();
 
 const UploadImages = (props) => {
     const { studioId } = useParams();
@@ -31,7 +33,7 @@ const UploadImages = (props) => {
 
         try {
             setUploading(true);
-            await axios.post(`http://localhost:3001/uploadImages?studioId=${studioId}`, formData, {
+            await axios.post(`${process.env.VITE_API_BASE_URL}/uploadImages?studioId=${studioId}`, formData, {
                 params: {
                     service: props.service
                 }

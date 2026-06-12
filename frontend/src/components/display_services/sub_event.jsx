@@ -8,6 +8,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./sub-event.css"; // Assuming you have a CSS file for styling
 // import UploadImages from "./UploadImages";
+import env from 'dotenv';
+env.config();
 const SubEvent = (props) => {
   const { studioId } = useParams(); // Getting studio ID from the route
   const [title, setTitle] = useState("");
@@ -21,7 +23,7 @@ const SubEvent = (props) => {
       const service = props.service;
       
       const subEventData = { title, price, description, service };
-      await axios.post(`http://localhost:3001/studios/${studioId}/subevents`, subEventData);
+      await axios.post(`${process.env.VITE_API_BASE_URL}/studios/${studioId}/subevents`, subEventData);
       setMessage("Sub-event added successfully!");
       setTitle("");
       setPrice("");

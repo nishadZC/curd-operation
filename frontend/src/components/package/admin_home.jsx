@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./admin_home.css"; // Optional: for styling
-
+import env from 'dotenv';
+env.config();
 const AdminDashboard = () => {
   const [enquiries, setEnquiries] = useState([]);
 
   useEffect(() => {
     const fetchEnquiries = async () => {
       try {
-        const response = await axios.get("http://localhost:3001/admin_home");
+        const response = await axios.get(`${process.env.VITE_API_BASE_URL}/admin_home`);
         setEnquiries(response.data);
       } catch (error) {
         console.error("Error fetching admin data:", error);

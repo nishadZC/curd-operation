@@ -3,7 +3,8 @@ import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 // import "../style.css";
 import "./user-form.css"
-
+import env from 'dotenv';
+env.config();
 const UserForm = () => {
     const { packageId } = useParams(); // Fetching package ID from URL
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const UserForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3001/user_form", formData, {
+            await axios.post(`${process.env.VITE_API_BASE_URL}/user_form`, formData, {
                 headers: { "Content-Type": "application/json" }
             });
             alert("Enquiry submitted successfully!");

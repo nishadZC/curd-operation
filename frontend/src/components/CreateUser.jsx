@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 import axios  from "axios";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useNavigate } from 'react-router-dom';
+import env from 'dotenv';
+env.config();
 const CreateUser = () => {
     const[emp_name,setName]=useState("")
     const[emp_email,setEmail]=useState("");
@@ -10,7 +12,7 @@ const CreateUser = () => {
 
     const Submit=(e)=>{
         e.preventDefault();
-       axios.post("http://localhost:3001/createUser",{emp_name,emp_email,emp_age})
+       axios.post(`${process.env.VITE_API_BASE_URL}/createUser`,{emp_name,emp_email,emp_age})
         .then(result=>{
             console.log(result)
             navigate("/home") })

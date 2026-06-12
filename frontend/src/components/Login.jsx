@@ -4,7 +4,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import "./login.css";
-
+import env from 'dotenv';
+env.config();
 const Login = (props) => {
     const [admin_email, setEmail] = useState("");
     const [admin_password, setPassword] = useState("");
@@ -19,7 +20,7 @@ const Login = (props) => {
             return;
         }
 
-        axios.post("http://localhost:3001/login", { admin_email, admin_password }, {
+        axios.post(`${process.env.VITE_API_BASE_URL}/login`, { admin_email, admin_password }, {
             headers: { "Content-Type": "application/json" }
         })
             .then(result => {

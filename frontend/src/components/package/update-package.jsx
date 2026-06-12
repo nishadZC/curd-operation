@@ -3,7 +3,8 @@ import axios from "axios";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
 import "../style.css";
-
+import env from 'dotenv';
+env.config();
 const Package = (props) => {
     const pkg = props.pkg
     
@@ -32,7 +33,7 @@ const Package = (props) => {
 
     const fetchStudios = async (serviceType) => {
         try {
-            const response = await axios.get("http://localhost:3001/getStudios", {
+            const response = await axios.get(`${process.env.VITE_API_BASE_URL}/getStudios`, {
                 params: {
                     service: serviceType
                 }
@@ -125,7 +126,7 @@ const Package = (props) => {
             console.log("Form Data with Image:", formDataWithImage);
             
             
-            await axios.post("http://localhost:3001/update_package", formDataWithImage, {
+            await axios.post(`${process.env.VITE_API_BASE_URL}/update_package`, formDataWithImage, {
                 params: {
                     packageType: props.packageType
                 }

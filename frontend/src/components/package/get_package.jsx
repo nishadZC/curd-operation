@@ -8,8 +8,9 @@ import DisplayService from "./display_service";
 import './get-package.css'
 
 import Modal from 'react-bootstrap/Modal';
-
 import UpdatePackage from "./update-package"
+import env from 'dotenv';
+env.config();
 
 const ModalComponent = (props) => {
   return (
@@ -37,7 +38,7 @@ const GetPackage = (props) => {
       try {
         // console.log("Get Package: ",props.packageType);
 
-        const response = await axios.get("http://localhost:3001/get_packages", {
+        const response = await axios.get(`${process.env.VITE_API_BASE_URL}/get_packages`, {
           params: {
             packageType: props.packageType,
           },
@@ -54,7 +55,7 @@ const GetPackage = (props) => {
   // 🔍 Fetch studioID based on photographer name
   const handlePhotographerClick = async (name, serviceType) => {
     try {
-      const response = await axios.get("http://localhost:3001/getStudios", {
+      const response = await axios.get(`${process.env.VITE_API_BASE_URL}/getStudios`, {
         params: {
           service: serviceType,
         },

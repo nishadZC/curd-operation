@@ -2,12 +2,13 @@ import axios from 'axios'
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import env from 'dotenv';
+env.config();
 const Users = () => {
     const [users, setUsers] = useState([])
 
     useEffect(() => {
-        axios.get('http://localhost:3001/home')
+        axios.get(`${process.env.VITE_API_BASE_URL}/home`)
             .then(result => setUsers(result.data))
             .catch(err => console.log(err))
     }, [])
@@ -15,7 +16,7 @@ const Users = () => {
     const handleDelete = id => {
         const confirmation = window.confirm("Are you sure you want to delete this user?\nPress OK to confirm or Cancel to abort.");
         if (confirmation) {
-            axios.delete(`http://localhost:3001/deleteUser/${id}`)
+            axios.delete(`${process.env.VITE_API_BASE_URL}/deleteUser/${id}`)
                 .then(res => {
                     console.log(res)
                     window.location.reload()

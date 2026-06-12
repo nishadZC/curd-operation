@@ -12,7 +12,8 @@ import CarouselOneStep from "../caraousel_one_step";
 import Modal from 'react-bootstrap/Modal';
 
 import UpdatePhotographer from "./UpdatePhotographer"
-
+import env from 'dotenv';
+env.config();
 const ModalComponent = (props) => {
   return (
     <Modal show={props.show} fullscreen={true} onHide={() => props.setShow(false)}>
@@ -37,7 +38,7 @@ const GetStudios = (props) => {
         const service = props.service;
 
         const serviceData = { "service": service };
-        const response = await axios.get("http://localhost:3001/getStudios", { params: serviceData });
+        const response = await axios.get(`${process.env.VITE_API_BASE_URL}/getStudios`, { params: serviceData });
         setStudios(response.data);
       } catch (error) {
         console.error("Error fetching studios:", error);
@@ -82,7 +83,7 @@ const GetStudios = (props) => {
                 <div className="studio-card" style={{ cursor: "pointer" }}>
                   <div className="studio-img">
                     <img
-                      src={`http://localhost:3001${studio.studio_image}`}
+                      src={`${process.env.VITE_API_BASE_URL}${studio.studio_image}`}
                       alt={studio.studio_name}
                     />
                   </div>
