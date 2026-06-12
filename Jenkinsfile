@@ -99,7 +99,7 @@ pipeline {
                         docker stop frontend || true
                         docker rm frontend || true
     
-                        docker run -d --name backend -p 5000:5000 ${BACKEND_IMAGE}:latest
+                        docker run -d --name backend -p 3001:3001 ${BACKEND_IMAGE}:latest
                         docker run -d --name frontend -p 80:80 ${FRONTEND_IMAGE}:latest
                     '
                 """
