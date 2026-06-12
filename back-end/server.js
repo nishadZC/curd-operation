@@ -39,7 +39,7 @@ app.use(cors());
 app.use(express.urlencoded({ extended: true })); // For form submissions
 app.use(express.json());
 
-mongoose.connect("mongodb://127.0.0.1:27017/EventManagement");
+mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/EventManagement");
 
 const asyncHandler = fn => (req, res) =>
     fn(req, res).catch(
