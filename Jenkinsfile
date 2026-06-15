@@ -10,13 +10,11 @@ pipeline {
     }
 
     environment {
-        BACKEND_IMAGE = "${env.BACKEND_IMAGE}"
-        FRONTEND_IMAGE = "${env.FRONTEND_IMAGE}"
-        VITE_API_BASE_URL = "http://65.0.95.121:3001"
+        BACKEND_IMAGE = 'nishadzc/curd-operation-backend'
+        FRONTEND_IMAGE = 'nishadzc/curd-operation-frontend'
     }
 
     stages {
-
         stage('Checkout') {
             steps {
                 checkout scm
@@ -27,7 +25,6 @@ pipeline {
             steps {
                 sh '''
                     set -e
-
                     cd back-end
                     npm ci
                     node --check server.js
@@ -36,25 +33,6 @@ pipeline {
                     npm ci
                     npm run build
                 '''
-            }
-        }
-
-        stage('SonarQube Analysis') {
-            steps {
-                script {
-                    def scannerHome = tool 'SonarScanner'
-
-                    withSonarQubeEnv('SonarQube') {
-                        sh "${scannerHome}/bin/sonar-scanner"
-                    }
-                }
-            }
-        }
-        stage('Quality Gate') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    waitForQualityGate abortPipeline: false
-                }
             }
         }
 
@@ -79,43 +57,9 @@ pipeline {
 
                         docker push "${BACKEND_IMAGE}:${BUILD_NUMBER}"
                         docker push "${BACKEND_IMAGE}:latest"
-
                         docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
                         docker push "${FRONTEND_IMAGE}:latest"
                     '''
-                }
-            }
-        }
-        stage('Deploy') {
-            steps {
-                withCredentials([
-                    string(credentialsId: 'mongodb-uri', variable: 'MONGODB_URI')
-                ]) {
-                    sshagent(['docker-vm-key']) {
-                        sh """
-                            ssh -o StrictHostKeyChecking=no ubuntu@65.0.95.121 '
-                                docker pull ${BACKEND_IMAGE}:latest
-                                docker pull ${FRONTEND_IMAGE}:latest
-        
-                                docker stop backend || true
-                                docker rm backend || true
-        
-                                docker stop frontend || true
-                                docker rm frontend || true
-        
-                                docker run -d \
-                                  --name backend \
-                                  -p 3001:3001 \
-                                  -e MONGODB_URI="${MONGODB_URI}" \
-                                  ${BACKEND_IMAGE}:latest
-        
-                                docker run -d \
-                                  --name frontend \
-                                  -p 80:80 \
-                                  ${FRONTEND_IMAGE}:latest
-                            '
-                        """
-                    }
                 }
             }
         }
