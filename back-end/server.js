@@ -38,8 +38,13 @@ const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true })); // For form submissions
 app.use(express.json());
+import dotenv from 'dotenv';
+dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/EventManagement");
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}).then(() => console.log("MongoDB connected"));
 
 const asyncHandler = fn => (req, res) =>
     fn(req, res).catch(
