@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM public.ecr.aws/docker/library/node:20-alpine
 
 WORKDIR /app
 
@@ -8,5 +8,5 @@ RUN npm ci
 COPY . .
 
 EXPOSE 3001
-# VOLUME /tmp
+
 CMD ["npm", "start"]
