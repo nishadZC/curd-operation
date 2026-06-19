@@ -129,6 +129,16 @@ const upload = multer({ storage });
 
 // Ensure the uploads folder is publicly accessible
 app.use("/uploads", express.static("uploads"));
+
+app.get("/health", (req, res) => {
+    const dbState = mongoose.connection.readyState;
+    const healthy = dbState === 1;
+    res.status(healthy ? 200 : 503).json({
+        status: healthy ? "ok" : "unavailable",
+        mongodbState: dbState,
+    });
+});
+
 // Route to add a studio with image upload
 app.post("/addStudios", upload.single("studio_image"), async (req, res) => {
     try {
