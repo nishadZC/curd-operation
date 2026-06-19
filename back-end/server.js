@@ -7,6 +7,7 @@ import multer from 'multer'
 import PhotographerStudio from './Photographer/PhotographerStudio.js';
 import path from 'path';
 import fs from "fs";
+import dns from 'dns';
 import PhotographerSubEvent from './Photographer/PhotographerSubEvent.js';
 import PhotographerSampleModel from './Photographer/PhotographerSampleSchema.js';
 import Contact from './contact.js';
@@ -41,14 +42,27 @@ app.use(express.json());
 import dotenv from 'dotenv';
 dotenv.config();
 
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-}).then(() => console.log("MongoDB connected"));
+dns.setServers(['1.1.1.1', '8.8.8.8']);
+
+const mongoUri = process.env.MONGODB_URI;
+if (!mongoUri) {
+    console.error('Missing MONGODB_URI in environment.');
+    process.exit(1);
+}
 
 const asyncHandler = fn => (req, res) =>
     fn(req, res).catch(
         err => res.status(500).json({ error: err.message }));
+
+mongoose.connect(mongoUri, {
+    serverSelectionTimeoutMS: 10000,
+}).then(() => {
+    console.log('MongoDB connected');
+    app.listen(process.env.PORT || 3001, () => console.log('Server running on port 3001'));
+}).catch(err => {
+    console.error('MongoDB connection failed:', err);
+    process.exit(1);
+});
 
 
 app.post("/", asyncHandler(
@@ -756,4 +770,3 @@ app.post("/user_form", async (req, res) => {
   });
   
 
-app.listen(3001, () => console.log("Server running on port 3001"));
