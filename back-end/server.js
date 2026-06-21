@@ -34,7 +34,7 @@ import BirthdayPackage from './Packages/BirthdayPackages.js';
 import BabyShowerPackage from './Packages/BabyShowerPackages.js';
 
 import PackageModel from './Packages/WeddingPackages.js';
-import UserDataModel from './user_data.js';
+import UserDataModel from './Models/UserData.js';
 const app = express();
 app.use(cors());
 app.use(express.urlencoded({ extended: true })); // For form submissions
