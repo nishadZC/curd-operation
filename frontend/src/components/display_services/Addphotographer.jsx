@@ -14,7 +14,7 @@ const Studios = (props) => {
     });
 
     const [image, setImage] = useState(null);
-    const navigate = useNavigate(); // ✅ Initialize navigate
+    const navigate = useNavigate(); //Initialize navigate
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
