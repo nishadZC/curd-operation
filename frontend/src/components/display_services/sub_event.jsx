@@ -6,7 +6,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "./sub-event.css"; // Assuming you have a CSS file for styling
+import "./display-services-css/sub-event.css"; // Assuming you have a CSS file for styling
 // import UploadImages from "./UploadImages";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const SubEvent = (props) => {

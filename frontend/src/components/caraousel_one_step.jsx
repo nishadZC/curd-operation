@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
-import "./style.css";
+import "./main-css/style.css";
 
-import image1 from "./studioImage/image1.png";
-import image2 from "./studioImage/image2.png";
-import image3 from "./studioImage/image3.png";
-import image4 from "./studioImage/image4.png";
-
+import image3 from "./studio-image/image3.png";
+import image4 from "./studio-image/image4.png";
+import image1 from "./studio-image/image3.png";
+import image2 from "./studio-image/image4.png";
 const images = [image1, image2, image3, image4];
 
 

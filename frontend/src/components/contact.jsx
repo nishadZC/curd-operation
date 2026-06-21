@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './contact.css'; 
+import './main-css/contact.css'; 
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const Contact = () => {
   const [formData, setFormData] = useState({

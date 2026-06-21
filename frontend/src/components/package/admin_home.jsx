@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./admin_home.css"; // Optional: for styling
+import "./package-css/admin_home.css"; // Optional: for styling
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const AdminDashboard = () => {
   const [enquiries, setEnquiries] = useState([]);

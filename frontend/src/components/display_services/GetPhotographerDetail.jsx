@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "./get-photographer-details.css"; // Optional for styling
+import "./display-services-css/get-photographer-details.css"; // Optional for styling
 import FetchSubEvent from "./fetch_sub_event";
 import { Link } from "react-router-dom";
 

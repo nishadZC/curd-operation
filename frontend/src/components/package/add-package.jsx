@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Select from "react-select";
 import { useNavigate } from "react-router-dom";
-import "../style.css";
+import "../main-css/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const Package = (props) => {
     const [formData, setFormData] = useState({

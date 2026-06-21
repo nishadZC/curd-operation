@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import "./Event.css"; // Assuming you will style it here
+import "./main-css/Event.css"; // Assuming you will style it here
 
 const Event = (props) => {
   return (

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 // import "../style.css";
-import "./user-form.css"
+import "./package-css/user-form.css"
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const UserForm = () => {
     const { packageId } = useParams(); // Fetching package ID from URL

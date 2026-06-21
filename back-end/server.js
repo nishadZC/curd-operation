@@ -1,8 +1,8 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
-import EmployeeModel from './Employees.js';
-import AdminModel from './Admin.js';
+import EmployeeModel from './Models/Employees.js';
+import AdminModel from './Models/Admin.js';
 import multer from 'multer'
 import PhotographerStudio from './Photographer/PhotographerStudio.js';
 import path from 'path';
@@ -10,7 +10,7 @@ import fs from "fs";
 import dns from 'dns';
 import PhotographerSubEvent from './Photographer/PhotographerSubEvent.js';
 import PhotographerSampleModel from './Photographer/PhotographerSampleSchema.js';
-import Contact from './contact.js';
+import Contact from './Models/Contact.js';
 
 import HallStudio from './Hall/HallStudio.js';
 import HallSubEvent from './Hall/HallSubEvent.js';
@@ -41,6 +41,22 @@ app.use(express.urlencoded({ extended: true })); // For form submissions
 app.use(express.json());
 import dotenv from 'dotenv';
 dotenv.config();
+
+import { v2 as cloudinary } from 'cloudinary';
+
+// Configure Cloudinary
+if (process.env.CLOUDINARY_URL) {
+    cloudinary.config({ secure: true });
+} else if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+    cloudinary.config({
+        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+        api_key: process.env.CLOUDINARY_API_KEY,
+        api_secret: process.env.CLOUDINARY_API_SECRET,
+        secure: true
+    });
+} else {
+    console.warn('Cloudinary not configured. Set CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET.');
+}
 
 dns.setServers(['1.1.1.1', '8.8.8.8']);
 
@@ -145,61 +161,29 @@ app.post("/addStudios", upload.single("studio_image"), async (req, res) => {
         const { studio_name, studio_location, studio_description, studio_contact, studio_email, service } = req.body;
         console.log(service);
         let newStudio;
+        // If a file was uploaded, send to Cloudinary and remove local copy
+        let studio_image = "";
+        if (req.file) {
+            try {
+                const uploadResult = await cloudinary.uploader.upload(req.file.path, { folder: `${service}/studios` });
+                studio_image = uploadResult.secure_url;
+                fs.unlink(req.file.path, (err) => { if (err) console.warn('Failed to remove temp file', err); });
+            } catch (err) {
+                console.error('Cloudinary upload failed:', err);
+                studio_image = `/uploads/${service}/${req.file.filename}`;
+            }
+        }
 
         if (service == 'Photographer') {
-            const studio_image = req.file ? `/uploads/${service}/${req.file.filename}` : "";
-            newStudio = await PhotographerStudio.create({
-                studio_name,
-                studio_location,
-                studio_description,
-                studio_contact,
-                studio_email,
-                studio_image,
-            });
-        }
-        else if (service == 'Hall') {
-            const studio_image = req.file ? `/uploads/${service}/${req.file.filename}` : "";
-            newStudio = await HallStudio.create({
-                studio_name,
-                studio_location,
-                studio_description,
-                studio_contact,
-                studio_email,
-                studio_image,
-            });
-        }
-        else if (service == 'Caterer') {
-            const studio_image = req.file ? `/uploads/${service}/${req.file.filename}` : "";
-            newStudio = await CatererStudio.create({
-                studio_name,
-                studio_location,
-                studio_description,
-                studio_contact,
-                studio_email,
-                studio_image,
-            });
-        }
-        else if (service == 'Decoration') {
-            const studio_image = req.file ? `/uploads/${service}/${req.file.filename}` : "";
-            newStudio = await DecorationStudio.create({
-                studio_name,
-                studio_location,
-                studio_description,
-                studio_contact,
-                studio_email,
-                studio_image,
-            });
-        }
-        else if (service == 'Bartender') {
-            const studio_image = req.file ? `/uploads/${service}/${req.file.filename}` : "";
-            newStudio = await BartenderStudio.create({
-                studio_name,
-                studio_location,
-                studio_description,
-                studio_contact,
-                studio_email,
-                studio_image,
-            });
+            newStudio = await PhotographerStudio.create({ studio_name, studio_location, studio_description, studio_contact, studio_email, studio_image });
+        } else if (service == 'Hall') {
+            newStudio = await HallStudio.create({ studio_name, studio_location, studio_description, studio_contact, studio_email, studio_image });
+        } else if (service == 'Caterer') {
+            newStudio = await CatererStudio.create({ studio_name, studio_location, studio_description, studio_contact, studio_email, studio_image });
+        } else if (service == 'Decoration') {
+            newStudio = await DecorationStudio.create({ studio_name, studio_location, studio_description, studio_contact, studio_email, studio_image });
+        } else if (service == 'Bartender') {
+            newStudio = await BartenderStudio.create({ studio_name, studio_location, studio_description, studio_contact, studio_email, studio_image });
         }
 
         res.json({ message: "Studio added successfully!", studio: newStudio });
@@ -219,7 +203,17 @@ app.post("/updateStudio", upload.single("studio_image"), async (req, res) => {
             return res.status(400).json({ error: "Missing studio_id or service type." });
         }
 
-        const studio_image = req.file ? `/uploads/${service}/${req.file.filename}` : undefined;
+        let studio_image;
+        if (req.file) {
+            try {
+                const uploadResult = await cloudinary.uploader.upload(req.file.path, { folder: `${service}/studios` });
+                studio_image = uploadResult.secure_url;
+                fs.unlink(req.file.path, (err) => { if (err) console.warn('Failed to remove temp file', err); });
+            } catch (err) {
+                console.error('Cloudinary upload failed:', err);
+                studio_image = `/uploads/${service}/${req.file.filename}`;
+            }
+        }
 
         const updateData = {
             studio_name,
@@ -307,7 +301,7 @@ const ServiceStorage = multer.diskStorage({
     destination: (req, file, cb) => {
         const service = req.body.service || req.params.service || req.query.service;
         const uploadPath = `./uploads/${service || 'default'}`;
-        const studioId = req.query.studioId; // ✅ Fetch studioId from query parameters
+        const studioId = req.query.studioId; // Fetch studioId from query parameters
         if (!studioId || !service) {
             return cb(new Error("Studio ID and Service is required"), false);
         }
@@ -324,12 +318,12 @@ const ServiceStorage = multer.diskStorage({
 
 const ServiceUpload = multer({ storage: ServiceStorage });
 
-// ✅ Fix the Upload Route
+// Fix the Upload Route
 app.post("/uploadImages", ServiceUpload.array("images", 10), async (req, res) => {
     try {
         const service = req.body.service || req.params.service || req.query.service;
         const uploadPath = `/uploads/${service || 'default'}`;
-        const { studioId } = req.query; // ✅ Use req.query to get studioId
+        const { studioId } = req.query; // Use req.query to get studioId
         if (!studioId || !service) {
             return res.status(400).json({ message: "Studio ID and Service is required" });
         }
@@ -337,30 +331,33 @@ app.post("/uploadImages", ServiceUpload.array("images", 10), async (req, res) =>
             return res.status(400).json({ message: "No images uploaded" });
         }
 
-        const imagePaths = req.files.map(file => `${uploadPath}/${service}_samples/${studioId}/${file.filename}`);
-
-        if (!studioId || !service) {
-            return res.status(400).json({ message: "Studio ID and Service is required" });
+        // Upload each file to Cloudinary and collect secure URLs
+        const uploadedUrls = [];
+        for (const file of req.files) {
+            try {
+                const result = await cloudinary.uploader.upload(file.path, { folder: `${service}/samples/${studioId}` });
+                uploadedUrls.push(result.secure_url);
+                fs.unlink(file.path, (err) => { if (err) console.warn('Failed to remove temp file', err); });
+            } catch (err) {
+                console.error('Cloudinary upload failed for', file.path, err);
+                // fallback to local path for this file
+                uploadedUrls.push(`${uploadPath}/${service}_samples/${studioId}/${file.filename}`);
+            }
         }
-
 
         if (service == 'Photographer') {
-            await PhotographerSampleModel.create({ studioId, images: imagePaths });
-        }
-        else if (service == 'Hall') {
-            await HallSampleModel.create({ studioId, images: imagePaths });
-        }
-        else if (service == 'Caterer') {
-            await CatererSampleModel.create({ studioId, images: imagePaths });
-        }
-        else if (service == 'Decoration') {
-            await DecorationSampleModel.create({ studioId, images: imagePaths });
-        }
-        else if (service == 'Bartender') {
-            await BartenderSampleModel.create({ studioId, images: imagePaths });
+            await PhotographerSampleModel.create({ studioId, images: uploadedUrls });
+        } else if (service == 'Hall') {
+            await HallSampleModel.create({ studioId, images: uploadedUrls });
+        } else if (service == 'Caterer') {
+            await CatererSampleModel.create({ studioId, images: uploadedUrls });
+        } else if (service == 'Decoration') {
+            await DecorationSampleModel.create({ studioId, images: uploadedUrls });
+        } else if (service == 'Bartender') {
+            await BartenderSampleModel.create({ studioId, images: uploadedUrls });
         }
 
-        res.json({ message: "Images uploaded successfully", images: imagePaths });
+        res.json({ message: "Images uploaded successfully", images: uploadedUrls });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -583,58 +580,28 @@ app.post("/add_package", upload.single("package_image"), async (req, res) => {
             return res.status(400).json({ message: "Package type is required" });
         }
 
+        // If package image uploaded, send to Cloudinary
+        let package_image = "";
+        if (req.file) {
+            try {
+                const uploadResult = await cloudinary.uploader.upload(req.file.path, { folder: `packages/${packageType}` });
+                package_image = uploadResult.secure_url;
+                fs.unlink(req.file.path, (err) => { if (err) console.warn('Failed to remove temp file', err); });
+            } catch (err) {
+                console.error('Cloudinary upload failed for package image:', err);
+                package_image = req.file.path;
+            }
+        }
+
         let newPackage;
         if (packageType == "Wedding") {
-            newPackage = new WeddingPackage({
-                package_name,
-                package_price,
-                package_photographer,
-                package_caterer,
-                package_hall,
-                package_bartender,
-                package_decoration,
-                package_description,
-                package_image: req.file ? req.file.path : ""
-            });
-        }
-        else if (packageType == "Birthday") {
-            newPackage = new BirthdayPackage({
-                package_name,
-                package_price,
-                package_photographer,
-                package_caterer,
-                package_hall,
-                package_bartender,
-                package_decoration,
-                package_description,
-                package_image: req.file ? req.file.path : ""
-            });
-        }
-        else if (packageType == "Anniversary") {
-            newPackage = new AnniversaryPackage({
-                package_name,
-                package_price,
-                package_photographer,
-                package_caterer,
-                package_hall,
-                package_bartender,
-                package_decoration,
-                package_description,
-                package_image: req.file ? req.file.path : ""
-            });
-        }
-        else if (packageType == "Baby Shower") {
-            newPackage = new BabyShowerPackage({
-                package_name,
-                package_price,
-                package_photographer,
-                package_caterer,
-                package_hall,
-                package_bartender,
-                package_decoration,
-                package_description,
-                package_image: req.file ? req.file.path : ""
-            })
+            newPackage = new WeddingPackage({ package_name, package_price, package_photographer, package_caterer, package_hall, package_bartender, package_decoration, package_description, package_image });
+        } else if (packageType == "Birthday") {
+            newPackage = new BirthdayPackage({ package_name, package_price, package_photographer, package_caterer, package_hall, package_bartender, package_decoration, package_description, package_image });
+        } else if (packageType == "Anniversary") {
+            newPackage = new AnniversaryPackage({ package_name, package_price, package_photographer, package_caterer, package_hall, package_bartender, package_decoration, package_description, package_image });
+        } else if (packageType == "Baby Shower") {
+            newPackage = new BabyShowerPackage({ package_name, package_price, package_photographer, package_caterer, package_hall, package_bartender, package_decoration, package_description, package_image });
         }
 
         await newPackage.save();
@@ -709,7 +676,14 @@ app.post("/update_package", upload.single("package_image"), async (req, res) => 
 
         // Only update image if a new file is uploaded
         if (req.file) {
-            updateData.package_image = req.file.path;
+            try {
+                const uploadResult = await cloudinary.uploader.upload(req.file.path, { folder: `packages/${packageType}` });
+                updateData.package_image = uploadResult.secure_url;
+                fs.unlink(req.file.path, (err) => { if (err) console.warn('Failed to remove temp file', err); });
+            } catch (err) {
+                console.error('Cloudinary upload failed for package image:', err);
+                updateData.package_image = req.file.path;
+            }
         }
 
         let updatedPackage;

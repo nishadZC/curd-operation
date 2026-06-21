@@ -4,7 +4,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../style.css";
+import "../main-css/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 const Studios = (props) => {
     const studio = props.currentStudio;

@@ -4,6 +4,7 @@
     "start": "node server.js"
   },
   "dependencies": {
+    "cloudinary": "^1.41.3",
     "cors": "^2.8.5",
     "dotenv": "^17.4.2",
     "env": "^0.0.2",

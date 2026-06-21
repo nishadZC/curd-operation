@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../style.css";
+import "../main-css/style.css";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const UploadImages = (props) => {

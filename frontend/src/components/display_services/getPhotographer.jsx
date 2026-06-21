@@ -6,7 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 
-import "./studio.css";
+import "./display-services-css/studio.css";
 
 import CarouselOneStep from "../caraousel_one_step";
 import Modal from 'react-bootstrap/Modal';

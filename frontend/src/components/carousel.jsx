@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import "./carousel.css";
-
-import image1 from "./carouselImages/image1.png";
-import image2 from "./carouselImages/image2.png";
-import image3 from "./carouselImages/image3.png";
-import image4 from "./carouselImages/image4.png";
-
+import "./main-css/carousel.css";
+import image3 from "./studio-image/image3.png"; 
+import image4 from "./studio-image/image4.png";
+import image1 from "./studio-image/image3.png";
+import image2 from "./studio-image/image4.png";
 const images = [image1, image2, image3, image4];
 
 const Carousel = () => {

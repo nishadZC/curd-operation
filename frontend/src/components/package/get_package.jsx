@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import DisplayService from "./display_service";
 
-import './get-package.css'
+import './package-css/get-package.css'
 
 import Modal from 'react-bootstrap/Modal';
 import UpdatePackage from "./update-package"

@@ -5,7 +5,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import "./fetch-sub-event.css"; // Optional for styling
+import "./display-services-css/fetch-sub-event.css"; // Optional for styling
 import { Link } from "react-router-dom";
 // import DisplayService from "./display_service"; // Not used in this snippet
 import Modal from 'react-bootstrap/Modal';

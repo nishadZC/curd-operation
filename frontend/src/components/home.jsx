@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import "./style.css";
+import "./main-css/style.css";
 import Carousel from "./carousel";
 import image from "./images/image.png";
 import Contact from "./contact";
