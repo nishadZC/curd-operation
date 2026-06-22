@@ -35,6 +35,12 @@ html{
     overflow-x: scroll;
     overflow-y: hidden;
     padding: 24px;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;  /* IE and Edge */
+}
+
+.list_of_event::-webkit-scrollbar {
+    display: none; /* Chrome, Safari and Opera */
 }
 
 .event-card{

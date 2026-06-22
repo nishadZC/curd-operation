@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./main-css/style.css";
 import Carousel from "./Carousel";
-import image from "./images/image.png";
+import image from "../assets/images/image.png";
 import Contact from "./Contact";
 import About from "./About";
 import Services from "./Services";
@@ -14,6 +14,7 @@ const Home = (props) => {
   const handleSignOut = () => {
     props.setAdmin(false);
     localStorage.removeItem("isAdmin");
+    localStorage.removeItem("adminToken");
     navigate("/");
   };
 

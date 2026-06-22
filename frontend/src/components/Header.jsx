@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import image from "./images/image.png";
+import image from "../assets/images/image.png";
 
 const Header = ({ admin, setAdmin }) => {
   const navigate = useNavigate();
@@ -20,6 +20,7 @@ const Header = ({ admin, setAdmin }) => {
 
         <ul className="nav-links desktop-only">
           <li><Link to="/">Home</Link></li>
+          <li><Link to="#">About</Link></li>
           <li><Link to="/contact">Contact</Link></li>
           <li><Link to="/getStudios">Services</Link></li>
         </ul>

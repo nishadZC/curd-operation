@@ -3,7 +3,9 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import EmployeeModel from './Models/Employees.js';
 import AdminModel from './Models/Admin.js';
-import multer from 'multer'
+import multer from 'multer';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import PhotographerStudio from './Photographer/PhotographerStudio.js';
 import path from 'path';
 import fs from "fs";
@@ -102,12 +104,19 @@ mongoose.connect(mongoUri, {
 });
 
 
-app.post("/", asyncHandler(
-    async (req, res) =>
-        res.json(
-            await AdminModel.create(req.body)
-        )
-));
+app.post("/", asyncHandler(async (req, res) => {
+    const { admin_name, admin_email, admin_password } = req.body;
+    if (!admin_email || !admin_password) {
+        return res.status(400).json({ message: "Email and password are required" });
+    }
+    const hashedPassword = await bcrypt.hash(admin_password, 10);
+    const newAdmin = await AdminModel.create({
+        admin_name,
+        admin_email,
+        admin_password: hashedPassword
+    });
+    res.json(newAdmin);
+}));
 
 app.post("/login", asyncHandler(async (req, res) => {
     console.log("Login request received:", req.body);
@@ -124,15 +133,37 @@ app.post("/login", asyncHandler(async (req, res) => {
         return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    console.log("User found:", admin);
+    console.log("User found:", admin.admin_email);
 
-    if (admin.admin_password !== admin_password) {
-        console.log("Incorrect password for user:", admin_email);
-        return res.status(400).json({ message: "Invalid email or password" });
+    const isMatch = await bcrypt.compare(admin_password, admin.admin_password);
+    
+    if (!isMatch) {
+        // Fallback for existing plaintext passwords
+        if (admin.admin_password !== admin_password) {
+            console.log("Incorrect password for user:", admin_email);
+            return res.status(400).json({ message: "Invalid email or password" });
+        } else {
+            // Hash the plaintext password for future logins
+            admin.admin_password = await bcrypt.hash(admin_password, 10);
+            await admin.save();
+            console.log("Migrated plaintext password to hash for:", admin_email);
+        }
     }
 
     console.log("Login successful for:", admin_email);
-    res.json({ message: "Login successful", admin });
+    
+    const jwtSecret = process.env.JWT_SECRET || 'fallback_secret_key_123';
+    const token = jwt.sign(
+        { id: admin._id, email: admin.admin_email }, 
+        jwtSecret, 
+        { expiresIn: '2h' }
+    );
+
+    res.json({ 
+        message: "Login successful", 
+        token, 
+        admin: { id: admin._id, admin_name: admin.admin_name, admin_email: admin.admin_email } 
+    });
 }));
 
 app.get("/home", asyncHandler(async (req, res) => res.json(await EmployeeModel.find({}))));

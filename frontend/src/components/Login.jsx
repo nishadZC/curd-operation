@@ -24,7 +24,8 @@ const Login = (props) => {
         })
             .then(result => {
                 console.log("Login Success:", result.data);
-                localStorage.setItem("isAdmin", "true"); // ✅ persist login
+                localStorage.setItem("isAdmin", "true"); // persist login
+                localStorage.setItem("adminToken", result.data.token); // Store JWT Token
                 props.setAdmin(true);
                 toast.success("Login successful!");
                 setTimeout(() => navigate("/", { replace: true }), 1500);
