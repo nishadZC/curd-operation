@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import "./display-services-css/get-photographer-details.css"; // Optional for styling
-import FetchSubEvent from "./fetch_sub_event";
+import FetchSubEvent from "./FetchSubEvent";
 import { Link } from "react-router-dom";
 
 import Modal from 'react-bootstrap/Modal';
@@ -10,6 +10,8 @@ import Carousel from "react-bootstrap/Carousel";
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const ModalComponent = (props) => {
+    const getImageUrl = (image) => image?.startsWith('http') ? image : `${apiBaseUrl}${image}`;
+
     return (
         <Modal show={props.show} fullscreen={true} onHide={() => props.setShow(false)}>
             
@@ -23,7 +25,7 @@ const ModalComponent = (props) => {
                             <Carousel.Item key={index}>
                                 <img
                                     className="modal-image"
-                                    src={`${apiBaseUrl}${image}`}
+                                    src={getImageUrl(image)}
                                     alt={`Slide ${index + 1}`}
                                     height={50}
                                 />
@@ -78,8 +80,8 @@ const GetPhotographerDetail = (props) => {
                 {images.length > 0 ? (
                     <div className="get-photographer-image-grid">
                         {images.map((image, index) => (
-                            <span onClick={handleShow}>
-                                <img key={index} src={`${apiBaseUrl}${image}`} alt={`Sample ${index + 1}`} className="get-photographer-grid-image" />
+                            <span key={index} onClick={handleShow}>
+                                <img src={image?.startsWith('http') ? image : `${apiBaseUrl}${image}`} alt={`Sample ${index + 1}`} className="get-photographer-grid-image" />
                             </span>
                         ))}
 

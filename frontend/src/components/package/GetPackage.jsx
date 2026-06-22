@@ -3,12 +3,12 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import DisplayService from "./display_service";
+import DisplayService from "./DisplayService";
 
 import './package-css/get-package.css'
 
 import Modal from 'react-bootstrap/Modal';
-import UpdatePackage from "./update-package"
+import UpdatePackage from "./UpdatePackage"
 const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 const ModalComponent = (props) => {

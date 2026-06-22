@@ -8,7 +8,7 @@ import axios from "axios";
 
 import "./display-services-css/studio.css";
 
-import CarouselOneStep from "../caraousel_one_step";
+import CarouselOneStep from "../CaraouselOneStep";
 import Modal from 'react-bootstrap/Modal';
 
 import UpdatePhotographer from "./UpdatePhotographer"
@@ -34,7 +34,11 @@ const GetStudios = (props) => {
   useEffect(() => {
     const fetchStudios = async () => {
       try {
-        const service = props.service;
+        const service = props.service || localStorage.getItem("service");
+        if (!service) {
+          setStudios([]);
+          return;
+        }
 
         const serviceData = { "service": service };
         const response = await axios.get(`${apiBaseUrl}/getStudios`, { params: serviceData });
@@ -82,7 +86,7 @@ const GetStudios = (props) => {
                 <div className="studio-card" style={{ cursor: "pointer" }}>
                   <div className="studio-img">
                     <img
-                      src={`${apiBaseUrl}${studio.studio_image}`}
+                      src={studio.studio_image?.startsWith('http') ? studio.studio_image : `${apiBaseUrl}${studio.studio_image}`}
                       alt={studio.studio_name}
                     />
                   </div>

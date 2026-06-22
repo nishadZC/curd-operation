@@ -45,15 +45,36 @@ dotenv.config();
 import { v2 as cloudinary } from 'cloudinary';
 
 // Configure Cloudinary
+const cloudinaryConfig = {
+    secure: true,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
+};
+
+console.log('Cloudinary env vars:', {
+    CLOUDINARY_URL: !!process.env.CLOUDINARY_URL,
+    CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME ? 'set' : 'missing',
+    CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY ? 'set' : 'missing',
+    CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET ? 'set' : 'missing',
+});
+
+const getCloudinaryPublicId = (url) => {
+    if (!url || typeof url !== 'string') return null;
+    try {
+        const parsed = new URL(url);
+        const path = parsed.pathname;
+        const match = path.match(/\/v\d+\/(.+)\.[^./]+$/);
+        return match ? match[1] : null;
+    } catch (error) {
+        return null;
+    }
+};
+
 if (process.env.CLOUDINARY_URL) {
-    cloudinary.config({ secure: true });
+    cloudinary.config({ ...cloudinaryConfig, cloudinary_url: process.env.CLOUDINARY_URL });
 } else if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
-    cloudinary.config({
-        cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-        api_key: process.env.CLOUDINARY_API_KEY,
-        api_secret: process.env.CLOUDINARY_API_SECRET,
-        secure: true
-    });
+    cloudinary.config(cloudinaryConfig);
 } else {
     console.warn('Cloudinary not configured. Set CLOUDINARY_URL or CLOUDINARY_CLOUD_NAME/API_KEY/API_SECRET.');
 }
@@ -204,11 +225,28 @@ app.post("/updateStudio", upload.single("studio_image"), async (req, res) => {
         }
 
         let studio_image;
+        let existingStudio;
         if (req.file) {
+            if (service === "Photographer") existingStudio = await PhotographerStudio.findById(studio_id);
+            else if (service === "Hall") existingStudio = await HallStudio.findById(studio_id);
+            else if (service === "Caterer") existingStudio = await CatererStudio.findById(studio_id);
+            else if (service === "Decoration") existingStudio = await DecorationStudio.findById(studio_id);
+            else if (service === "Bartender") existingStudio = await BartenderStudio.findById(studio_id);
+
             try {
                 const uploadResult = await cloudinary.uploader.upload(req.file.path, { folder: `${service}/studios` });
                 studio_image = uploadResult.secure_url;
                 fs.unlink(req.file.path, (err) => { if (err) console.warn('Failed to remove temp file', err); });
+
+                const oldUrl = existingStudio?.studio_image;
+                if (oldUrl && oldUrl.startsWith('http')) {
+                    const publicId = getCloudinaryPublicId(oldUrl);
+                    if (publicId) {
+                        await cloudinary.uploader.destroy(publicId).catch((destroyErr) => {
+                            console.warn('Failed to delete old Cloudinary image:', destroyErr);
+                        });
+                    }
+                }
             } catch (err) {
                 console.error('Cloudinary upload failed:', err);
                 studio_image = `/uploads/${service}/${req.file.filename}`;
