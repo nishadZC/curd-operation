@@ -20,7 +20,7 @@ const Header = ({ admin, setAdmin }) => {
 
         <ul className="nav-links desktop-only">
           <li><Link to="/">Home</Link></li>
-          <li><Link to="#">About</Link></li>
+          <li><a href="/#about">About</a></li>
           <li><Link to="/contact">Contact</Link></li>
           <li><Link to="/getStudios">Services</Link></li>
         </ul>
