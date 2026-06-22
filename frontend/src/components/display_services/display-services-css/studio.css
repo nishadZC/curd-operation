@@ -33,7 +33,6 @@ html{
     width: auto;
     height: 250px;
     padding: 16px;
-    border: 1px solid var(--card-border);
     border-radius: 8px;
     background: #fff;
     box-shadow: 0 4px 8px rgba(162, 243, 174, 0.2);
@@ -43,15 +42,13 @@ html{
     grid-template-columns: 250px 1fr;
 }
 
-.studio-card:hover{
-    box-shadow: 0 0 4px, 0 0 2px var(--text-clr);
-}
+
 .studio-card img {
     width: 250px;
     height: 200px;
     border-radius: 4px;
     object-fit: cover;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); */
 }
 .studio-contact {
     display: flex;
@@ -72,7 +69,7 @@ html{
     justify-content: center;
     align-items: center;
     border-radius: 4px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     background-color: var(--secondarr-text-clr);
     transition: 0.3s;
     gap: 6px;
