@@ -3,15 +3,33 @@ html{
     line-height: 1.5rem;
     scroll-behavior: smooth;
 }
-.about-section{
-    display: grid;
+.about-section {
+    display: flex;
+    flex-direction: column;
     background-color: var(--body-clt);
-    text-align: start;
-    grid-auto-flow: row;
+    text-align: left;
     border: 1px solid var(--line-clr);
-  
-    padding: min(3em,15%);
-    h1,h2,p {
-        margin-top: 1em;
-    }
+    padding: 4rem 2rem;
+    max-width: 800px;
+    width: 90%;
+    margin: 4rem auto;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    box-sizing: border-box;
+}
+
+.about-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-clr);
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.about-section p {
+    font-size: 1.05rem;
+    color: #555555;
+    line-height: 1.6;
+    text-align: center;
+    margin: 0;
 }

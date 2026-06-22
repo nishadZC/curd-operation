@@ -27,7 +27,6 @@ const ModalComponent = (props) => {
                                     className="modal-image"
                                     src={getImageUrl(image)}
                                     alt={`Slide ${index + 1}`}
-                                    height={50}
                                 />
                             </Carousel.Item>
                         ))

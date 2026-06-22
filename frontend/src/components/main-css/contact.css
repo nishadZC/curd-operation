@@ -1,47 +1,76 @@
-.contact-section form  button{
-    background-color: var(--secondarr-text-clr);
-    color: var(--body-clt);
-    font-weight: 600;
-    width: fit-content;
-    border: none;
-    cursor: pointer;
-    padding: 8px 32px;
-    border-radius: 4px;
-}
-.contact-section form  button:hover{
- 
-    box-shadow: 0px 0px 4px , 0px 0px 4px var(--secondarr-text-clr);
-}
-.contact-section{
-    display: grid;
+.contact-section {
+    display: flex;
+    flex-direction: column;
     background-color: var(--body-clt);
-    text-align: start;
-    grid-auto-flow: row;
+    text-align: left;
     border: 1px solid var(--line-clr);
-    padding: min(3em,15%);
-    h1,h2,p {
-        margin-top: 1em;
-    }
+    padding: 3rem 2rem;
+    max-width: 600px;
+    width: 90%;
+    margin: 4rem auto;
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+    box-sizing: border-box;
 }
-.contact-section p{
-    margin-bottom: 16px;
+
+.contact-section h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-clr);
+    margin-bottom: 8px;
+    text-align: center;
 }
-form {
+
+.contact-section p {
+    font-size: 1.05rem;
+    color: #555555;
+    text-align: center;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
+.contact-section form {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    margin-bottom: 20px;
+    width: 100%;
 }
 
-input {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+.contact-section form input,
+.contact-section form textarea {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--card-border);
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
-textarea {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
+
+.contact-section form input:focus,
+.contact-section form textarea:focus {
+    outline: none;
+    border-color: var(--secondarr-text-clr);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(114, 0, 204, 0.1);
+}
+
+.contact-section form button {
+    background-color: var(--secondarr-text-clr);
+    color: var(--btn-text);
+    font-weight: 600;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.contact-section form button:hover {
+    background-color: var(--hover-clr);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }

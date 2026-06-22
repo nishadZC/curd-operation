@@ -10,85 +10,81 @@ html{
 
 .carousel {
     position: relative;
-    width: 100vw;
-    height: fit-content;
+    width: 100%;
+    height: 500px;
     overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
     display: flex;
-    flex-direction: column;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    font-family: poppin;
-    line-height: 3.5rem;
-
+    box-shadow: var(--shadow-sm);
   }
 .intro-carousel-image {
   width: 100%;
-  height: 40vh;          /* 75% of the viewport height */
-  object-fit: cover;     /* Crop the image without stretching */
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
-
   .carousel-text {
-    height: 100vh;
-    width: 100vw;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    position: absolute;
     font-family: Poppins, sans-serif;
-    color: var(--active-text-clr);
+    color: white;
     padding: 20px;
     text-align: center;
-    box-shadow: 0 0 8px, 0 10px 80px black;
-    background-color: rgba(0, 0, 0, 0.6); 
-    border-radius: 10px;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.6) 100%);
+    box-sizing: border-box;
+    z-index: 2;
   }
   
   .carousel-text h1{
-    font-size: 64px;
-    line-height: 3.5rem;
+    font-size: 3.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 16px;
     color: white;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
   }
   .carousel-text p{
-    font-size: 24px;
-    color: white;
-  }
-/* Responsive for tablets */
-@media (max-width: 992px) {
-  .carousel-text {
-    top: 35%;
-    max-width: 90%;
-    padding: 15px 30px;
-     line-height: 1.5rem;
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 600px;
+    margin: 0 auto;
+    text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
   }
 
+/* Responsive for tablets */
+@media (max-width: 992px) {
+  .carousel {
+    height: 400px;
+  }
   .carousel-text h1 {
     font-size: 2.5rem;
   }
-
   .carousel-text p {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
   }
 }
 
 /* Responsive for mobile */
-@media (max-width: 600px) {
-  .carousel-text {
-    top: 10%;
-    max-width: 90%;
-    padding: 10px 20px;
-         line-height: 1.2rem;
+@media (max-width: 768px) {
+  .carousel {
+    height: 320px;
   }
-
   .carousel-text h1 {
-    font-size: 1.4rem;
+    font-size: 1.8rem;
+    margin-bottom: 8px;
   }
-
   .carousel-text p {
-    font-size: 0.8rem;
+    font-size: 0.95rem;
+    max-width: 90%;
   }
 }

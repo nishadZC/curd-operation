@@ -1,50 +1,106 @@
-.userform-container {
-    padding: 20px;
-    margin: auto;
-    box-shadow: 0 0 4px, 0 0 4px black;
-    border-radius: 4px;
-    width: 500px;
-    background-color: var(--base-clr);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
 .form-wrapper {
-    height: 100vh; /* Full viewport height */
+    min-height: 100vh;
     display: flex;
-    justify-content: center; /* Horizontal center */
-    align-items: center;     /* Vertical center */
-    background-color: var(--body-clt); /* Optional: for background */
-    
-}
-.userform-container:hover{
-    box-shadow: 0 0 8px,0 0 8px blueviolet;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--base-clr);
+    padding: 40px 16px;
+    box-sizing: border-box;
 }
 
-h2{
-    margin-bottom: 25px;
-}
-label{
-    margin-right: 16px;
-}
-.container {
-    padding: 20px;
+.userform-container {
+    padding: 32px;
     width: 100%;
+    max-width: 480px;
     background-color: var(--body-clt);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-md);
+    box-sizing: border-box;
+    transition: box-shadow 0.3s ease;
 }
 
-form {
+.userform-container:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.userform-container h2 {
+    margin-bottom: 24px;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--text-clr);
+    text-align: center;
+}
+
+.form-style {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    margin-bottom: 20px;
+    gap: 20px;
+    width: 100%;
 }
 
-input {
-    padding: 8px;
-    font-size: 16px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    margin: 2px;
+.form-style .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+}
+
+.form-style label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-clr);
+    margin: 0;
+}
+
+.form-style input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    border: 1.5px solid var(--card-border);
+    background-color: #fafafa;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    margin: 0;
+}
+
+.form-style input:disabled {
+    background-color: #f1f1f1;
+    color: #888888;
+    cursor: not-allowed;
+}
+
+.form-style input:focus:not(:disabled) {
+    outline: none;
+    border-color: var(--secondarr-text-clr);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(114, 0, 204, 0.1);
+}
+
+.submit-button {
+    background-color: var(--secondarr-text-clr);
+    color: var(--btn-text);
+    font-weight: 600;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+}
+
+.submit-button:hover {
+    background-color: var(--hover-clr);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+@media (max-width: 480px) {
+    .userform-container {
+        padding: 24px;
+    }
 }

@@ -1,125 +1,175 @@
-
 .package_box {
-  background-color: whitesmoke;
-  margin: 20px;
+  background-color: var(--body-clt);
+  padding: 24px 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .package-container {
-    padding: 2rem;
+    padding: 32px 16px;
     max-width: 1200px;
+    width: 90%;
     margin: 0 auto;
-
-  }
+    box-sizing: border-box;
+}
   
-  .package-container h2 {
+.package-container h2 {
     text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
+    margin-bottom: 32px;
+    font-size: 2.25rem;
+    font-weight: 700;
     color: var(--text-clr);
-  }
+}
   
-  .package-card-grid {
-    margin: 20px;
+.package-card-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-bottom: 2rem;
-  }
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 32px;
+    margin-top: 24px;
+}
   
-  .package-card {
-    background-color: #f9f9f9;
-    border-radius: 15px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    padding: 1.5rem;
-    transition: transform 0.2s ease;
-    overflow:hidden;
-    width: auto;
-    height: auto;
-  }
-  
-  .package-card:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 4px,0 0 4px blueviolet;
-  }
-  
-  .package-card-body h3 {
-    margin-top: 0;
-    color: var(--accent-clr);
-    background-color: rgba(0, 0, 0, 0.1);
-    width: fit-content;
-    padding: 8px;
-    border-radius: 8px;
-    
-  }
-  
-  .package-card-body strong {
-    display: block;
-    font-size: 1rem;
-    margin: 0.5rem 0;
-    color: var(--text-clr);
-    
-  }
-  
-  .package-services {
-    margin: 1rem 0;
-    font-size: 0.95rem;
-  }
-  
-  .package-card-body p {
-    margin: 1rem 0;
-    color: #555;
-  }
-  
-  .enquire-link {
-    text-align: center;
-    margin-top: 1.5rem;
-  }
-  
-  .admin-link {
+.package-card {
+    background-color: #ffffff;
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    box-shadow: var(--shadow-sm);
+    padding: 24px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
     display: flex;
-    align-items: start;
-    padding: 0.6rem 1.2rem;
-    background-color: var(--secondarr-text-clr);
-    border-radius: 8px;
-    text-decoration: none;
-    transition: background-color 0.3s ease;
-  }
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    overflow: hidden;
+}
   
-
+.package-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--secondarr-text-clr);
+}
   
-  /* Add Package Link at bottom */
-  .package-enquire-link a{
-    padding: 8px 16px;
-    background-color: var(--secondarr-text-clr);
-    border: none;
-    border-radius: 8px;
+.package-card-body h3 {
+    margin-top: 0;
+    font-size: 1.35rem;
     font-weight: 600;
+    color: var(--secondarr-text-clr);
+    background-color: var(--base-clr);
     width: fit-content;
-    height: fit-content;
-    text-decoration: none;
-}
-.package-card a:hover{
-    color: var(--active-text-clr);
-    box-shadow: 0 0 4px,0 0 4px black;
-
-}
-.add_package{
-    text-decoration: none;
-    color:var(--body-clt);
-    background-color: var(--secondarr-text-clr);
-    padding: 8px 16px;
+    padding: 6px 14px;
     border-radius: 8px;
-    margin: 24px 0px;
+    margin-bottom: 16px;
+}
+  
+.package-card-body strong {
+    display: block;
+    font-size: 1.5rem;
+    margin: 12px 0;
+    color: var(--text-clr);
+}
+  
+.package-services {
+    margin: 16px 0;
+    font-size: 0.95rem;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+  
+.package-card-body p {
+    margin: 16px 0;
+    color: #555555;
+    line-height: 1.5;
+}
+  
+.package-enquire-link {
+    text-align: center;
+    margin-top: auto;
+    width: 100%;
+}
+  
+.admin-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 10px 16px;
+    background-color: var(--secondarr-text-clr);
+    color: var(--btn-text) !important;
+    border-radius: 8px;
+    text-decoration: none;
     font-weight: 600;
-
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
-.service-display{
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+.admin-link:hover {
+    background-color: var(--hover-clr);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+  
+.package-card .edit-btn {
+    background-color: #d32f2f;
+    color: #ffffff;
+    border: none;
+    padding: 6px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.package-card .edit-btn:hover {
+    background-color: #b71c1c;
 }
 
 .edit-btn-container {
-  position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 12px;
+}
+
+.add_package {
+    text-decoration: none;
+    color: var(--btn-text) !important;
+    background-color: var(--secondarr-text-clr);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+    margin-bottom: 16px;
+}
+
+.add_package:hover {
+    background-color: var(--hover-clr);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.service-display {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+@media (max-width: 768px) {
+    .package-container {
+        padding: 16px;
+        width: 95%;
+    }
+    .package-card-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+    .package-container h2 {
+        font-size: 1.75rem;
+    }
 }

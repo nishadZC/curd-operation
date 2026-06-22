@@ -1,128 +1,171 @@
-
-* {
-    margin: 0;
-    padding: 0;
-}
-
-html {
-    font-family: poppins, 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    line-height: 1.5rem;
-    color: var(--text-clr);
-}
-
 .fetch-sub-events {
-    padding: 0px;
+    padding: 0;
     margin: 0;
-  
+    width: 100%;
 }
 
 .sub-event-card-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    margin-top: 20px;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 24px;
+    margin-top: 24px;
+    width: 100%;
+}
+
+.subevent-container {
+    position: relative;
+    width: 100%;
 }
 
 .sub-event-card {
-    border: 1px solid var(--accent-clr);
-    border-radius: 8px;
-    padding: 16px;
-    width: 240px;
-    height: 200px;
-    overflow: hidden;
-    box-shadow: 0 0px 4px,0 0 4px var(--hover-clr);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 24px;
+    height: 220px;
     background: var(--body-clt);
-}
-.sub-event-card:hover {
-    box-shadow: 0 0 4px, 0 0 80px var(--accent-clr) inset;
-    transition: 0.3s;
-}
-
-.sub-event-card h3,strong{
-    margin-top: 0;
-    font-size: 1.2rem;
-    color: var(--active-text-clr);
-}
-
-.error {
-    color: red;
-}
-#sub-event-card-title {
-    font-size: 1.2rem;
-    font-weight: 600;
-    margin-bottom: 10px;
-    text-align: center;
-}
-.addButton a{
-    text-decoration: none;
-   
-    
-}
-.addButton span{
-     display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 600;
-    background-color: var(--secondarr-text-clr);
-    color: var(--body-clt);
-    padding: 8px 16px;
-    width: fit-content;
-    border-radius: 4px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
-    
-}
-.addButton{
-    text-decoration: none;
-    height: fit-content;
-}
-.addButton span:hover{
-    transition: 0.3s;
-    color: var(--btn-text);
-    background-color: var(--hover-clr);
-       transform: scale(1.02);
-}
-.sub-event-card {
-    border: 1px solid var(--secondarr-text-clr);
-    border-radius: 8px;
-    padding: 16px;
-    width: 240px;
-    height: 200px; /* Increased height for content + button */
-    overflow: hidden;
-    box-shadow: 0 0px 4px, 0 0 4px var(--hover-clr);
-    background: var(--body-clt);
+    box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    text-align: center;
+    justify-content: space-between;
+    text-align: left;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.sub-event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-md);
+    border-color: var(--secondarr-text-clr);
+}
+
+.sub-event-card p {
+    margin: 0 0 12px 0;
+}
+
+#sub-event-card-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-clr);
+    margin-bottom: 8px;
+    text-align: left;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.sub-event-card strong {
+    font-size: 1.35rem;
+    color: var(--secondarr-text-clr);
+    display: block;
+    margin-bottom: 12px;
+}
+
+.addButton {
+    margin-bottom: 24px;
+}
+
+.addButton a {
+    text-decoration: none;
+    display: inline-block;
+}
+
+.addButton span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    background-color: var(--secondarr-text-clr);
+    color: var(--btn-text);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.addButton span:hover {
+    background-color: var(--hover-clr);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
 }
 
 .enquire {
-    margin-top: auto; /* Pushes this div to the bottom */
+    margin-top: auto;
+    width: 100%;
 }
 
 .enquire a {
     text-decoration: none;
     background-color: var(--secondarr-text-clr);
-    color: var(--body-clt);
-    border-radius: 4px;
+    color: var(--btn-text) !important;
+    border-radius: 8px;
     width: 100%;
-    display: flex;
+    display: inline-flex;
     justify-content: center;
     align-items: center;
-    padding: 6px;
-    gap: 6px;
+    padding: 10px;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
 }
 
 .enquire a:hover {
- 
-    box-shadow: 0 0 4px, 0 0 4px black;
+    background-color: var(--hover-clr);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
 }
 
 .delete-btn-container {
-    position: relative;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    z-index: 10;
 }
 
 .delete-btn {
-    width: fit-content;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(211, 47, 47, 0.1);
+    color: #d32f2f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+    color: #ffffff;
+}
+
+.error {
+    color: #d32f2f;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+/* Modal styles overrides for sub-event */
+#sub-event-card-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-clr);
+}
+
+@media (max-width: 768px) {
+    .sub-event-card-container {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    .sub-event-card {
+        height: auto;
+        min-height: 180px;
+    }
 }
