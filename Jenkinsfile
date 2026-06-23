@@ -6,12 +6,15 @@ pipeline {
     }
 
     tools {
-        nodejs 'NodeJS-20'
+        nodejs 'NodeJS 20.0.0'
     }
 
     environment {
-        BACKEND_IMAGE = '368763425814.dkr.ecr.ap-south-1.amazonaws.com/backend'
-        FRONTEND_IMAGE = '368763425814.dkr.ecr.ap-south-1.amazonaws.com/frontend'
+        AWS_REGION = 'ap-south-1'
+        ECR_REGISTRY = '368763425814.dkr.ecr.ap-south-1.amazonaws.com'
+
+        BACKEND_IMAGE = "${ECR_REGISTRY}/backend"
+        FRONTEND_IMAGE = "${ECR_REGISTRY}/frontend"
     }
 
     stages {
@@ -40,8 +43,12 @@ pipeline {
             steps {
                 sh '''
                     set -e
-                    docker build -t "${BACKEND_IMAGE}:${BUILD_NUMBER}" ./back-end
-                    docker build -t "${FRONTEND_IMAGE}:${BUILD_NUMBER}" ./frontend
+
+                    docker build -t ${BACKEND_IMAGE}:${BUILD_NUMBER} ./back-end
+                    docker build -t ${FRONTEND_IMAGE}:${BUILD_NUMBER} ./frontend
+
+                    docker tag ${BACKEND_IMAGE}:${BUILD_NUMBER} ${BACKEND_IMAGE}:latest
+                    docker tag ${FRONTEND_IMAGE}:${BUILD_NUMBER} ${FRONTEND_IMAGE}:latest
                 '''
             }
         }
@@ -49,33 +56,28 @@ pipeline {
         stage('Push Images') {
             steps {
                 withCredentials([
-                    string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
-                    string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                    [$class: 'AmazonWebServicesCredentialsBinding',
+                     credentialsId: 'aws-access-key']
                 ]) {
                     sh '''
                         set -e
 
-                        export AWS_DEFAULT_REGION=ap-south-1
+                        aws sts get-caller-identity
 
-                        if ! aws ecr describe-repositories --repository-names backend >/dev/null 2>&1; then
-                            aws ecr create-repository --repository-name backend || true
-                        fi
+                        aws ecr describe-repositories --repository-names backend >/dev/null 2>&1 || \
+                        aws ecr create-repository --repository-name backend
 
-                        if ! aws ecr describe-repositories --repository-names frontend >/dev/null 2>&1; then
-                            aws ecr create-repository --repository-name frontend || true
-                        fi
+                        aws ecr describe-repositories --repository-names frontend >/dev/null 2>&1 || \
+                        aws ecr create-repository --repository-name frontend
 
-                        aws ecr get-login-password --region ap-south-1 | \
-                        docker login --username AWS --password-stdin \
-                        368763425814.dkr.ecr.ap-south-1.amazonaws.com
+                        aws ecr get-login-password --region ${AWS_REGION} | \
+                        docker login --username AWS --password-stdin ${ECR_REGISTRY}
 
-                        docker tag "${BACKEND_IMAGE}:${BUILD_NUMBER}" "${BACKEND_IMAGE}:latest"
-                        docker tag "${FRONTEND_IMAGE}:${BUILD_NUMBER}" "${FRONTEND_IMAGE}:latest"
+                        docker push ${BACKEND_IMAGE}:${BUILD_NUMBER}
+                        docker push ${BACKEND_IMAGE}:latest
 
-                        docker push "${BACKEND_IMAGE}:${BUILD_NUMBER}"
-                        docker push "${BACKEND_IMAGE}:latest"
-                        docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
-                        docker push "${FRONTEND_IMAGE}:latest"
+                        docker push ${FRONTEND_IMAGE}:${BUILD_NUMBER}
+                        docker push ${FRONTEND_IMAGE}:latest
                     '''
                 }
             }
