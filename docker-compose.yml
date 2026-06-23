@@ -18,6 +18,8 @@ services:
     build: ./frontend
     image: nishadzc/curd-frontend:1.0.0
     restart: unless-stopped
+    env_file:
+      - ./frontend/.env
     ports:
       - "8000:80"
     depends_on:
