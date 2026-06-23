@@ -48,30 +48,36 @@ pipeline {
 
         stage('Push Images') {
             steps {
-                sh '''
-                    set -e
+                withCredentials([
+                    string(credentialsId: 'aws-access-key', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
+                    sh '''
+                        set -e
 
-                    # Ensure ECR repositories exist (no-op if they already do)
-                    if ! aws ecr describe-repositories --repository-names backend >/dev/null 2>&1; then
-                        aws ecr create-repository --repository-name backend || true
-                    fi
-                    if ! aws ecr describe-repositories --repository-names frontend >/dev/null 2>&1; then
-                        aws ecr create-repository --repository-name frontend || true
-                    fi
+                        export AWS_DEFAULT_REGION=ap-south-1
 
-                    # Login to ECR
-                    aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 368763425814.dkr.ecr.ap-south-1.amazonaws.com
+                        if ! aws ecr describe-repositories --repository-names backend >/dev/null 2>&1; then
+                            aws ecr create-repository --repository-name backend || true
+                        fi
 
-                    # Tag images for ECR (build stage already tagged them with the repo names)
-                    docker tag "${BACKEND_IMAGE}:${BUILD_NUMBER}" "${BACKEND_IMAGE}:latest"
-                    docker tag "${FRONTEND_IMAGE}:${BUILD_NUMBER}" "${FRONTEND_IMAGE}:latest"
+                        if ! aws ecr describe-repositories --repository-names frontend >/dev/null 2>&1; then
+                            aws ecr create-repository --repository-name frontend || true
+                        fi
 
-                    # Push images to ECR
-                    docker push "${BACKEND_IMAGE}:${BUILD_NUMBER}"
-                    docker push "${BACKEND_IMAGE}:latest"
-                    docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
-                    docker push "${FRONTEND_IMAGE}:latest"
-                '''
+                        aws ecr get-login-password --region ap-south-1 | \
+                        docker login --username AWS --password-stdin \
+                        368763425814.dkr.ecr.ap-south-1.amazonaws.com
+
+                        docker tag "${BACKEND_IMAGE}:${BUILD_NUMBER}" "${BACKEND_IMAGE}:latest"
+                        docker tag "${FRONTEND_IMAGE}:${BUILD_NUMBER}" "${FRONTEND_IMAGE}:latest"
+
+                        docker push "${BACKEND_IMAGE}:${BUILD_NUMBER}"
+                        docker push "${BACKEND_IMAGE}:latest"
+                        docker push "${FRONTEND_IMAGE}:${BUILD_NUMBER}"
+                        docker push "${FRONTEND_IMAGE}:latest"
+                    '''
+                }
             }
         }
     }
