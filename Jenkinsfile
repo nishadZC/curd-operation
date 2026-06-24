@@ -15,6 +15,8 @@ pipeline {
 
         BACKEND_IMAGE = "${ECR_REGISTRY}/backend"
         FRONTEND_IMAGE = "${ECR_REGISTRY}/frontend"
+
+        VITE_API_BASE_URL = credentials('vite-api-base-url')
     }
 
     stages {
@@ -33,6 +35,7 @@ pipeline {
                     node --check server.js
 
                     cd ../frontend
+                    echo "VITE_API_BASE_URL=${VITE_API_BASE_URL}" > .env
                     npm ci
                     npm run build
                 '''
@@ -43,6 +46,9 @@ pipeline {
             steps {
                 sh '''
                     set -e
+
+                    # Write frontend .env so Vite bakes the URL into the bundle at docker build time
+                    echo "VITE_API_BASE_URL=${VITE_API_BASE_URL}" > ./frontend/.env
 
                     docker build -t ${BACKEND_IMAGE}:${BUILD_NUMBER} ./back-end
                     docker build -t ${FRONTEND_IMAGE}:${BUILD_NUMBER} ./frontend
